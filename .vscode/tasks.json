@@ -1,0 +1,19 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Launch QEMU",
+            "type": "shell",
+            "isBackground": true,
+            "command": "Start-Process 'qemu-system-x86_64' -ArgumentList '-no-reboot -no-shutdown -monitor stdio -bios \"OVMF-pure-efi.fd\" -drive \"format=raw,file=fat:rw:${config:OutputPath}\"'",
+            "problemMatcher": []
+        },
+        {
+            "label": "Launch QEMU (debug)",
+            "type": "shell",
+            "isBackground": true,
+            "command": "Start-Process 'qemu-system-x86_64' -ArgumentList '-s -S -no-reboot -no-shutdown -monitor stdio -bios \"OVMF-pure-efi.fd\" -drive \"format=raw,file=fat:rw:${config:OutputPath}\"'",
+            "problemMatcher": []
+        }
+    ]
+}

@@ -1,0 +1,17 @@
+{
+    "configurations": [
+        {
+            "name": "UEFI",
+            "includePath": [
+                "${workspaceFolder}/**",
+                "${workspaceFolder}/thirdparty/edk2/MdePkg/Include",
+                "${workspaceFolder}/thirdparty/edk2/MdePkg/Include/X64"
+            ],
+            "compilerPath": "C:/Program Files/LLVM/bin/clang.exe",
+            "cStandard": "c17",
+            "intelliSenseMode": "clang-x64",
+            "configurationProvider": "ms-vscode.cpptools"
+        }
+    ],
+    "version": 4
+}

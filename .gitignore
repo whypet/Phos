@@ -1,0 +1,5 @@
+# Get OVMF from https://github.com/rust-osdev/ovmf-prebuilt (outdated) or build it yourself.
+# It is TianoCore's UEFI firmware used for QEMU.
+OVMF-pure-efi.fd
+
+out/
