@@ -4,3 +4,4 @@ project(Phos)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/Phos")
 
 add_subdirectory("src/Boot" "Boot")
+add_subdirectory("src/Kernel" "Kernel")

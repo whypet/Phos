@@ -1,13 +1,8 @@
 {
     "OutputPath": "out/Phos/",
     "files.associations": {
-        "uefi.h": "c",
-        "print.h": "c",
-        "phosboot.h": "c",
-        "debug.h": "c",
-        "string.h": "c",
-        "memory.h": "c",
-        "loadedimage.h": "c"
+        "*.c": "c",
+        "*.h": "c"
     },
     "C_Cpp.files.exclude": {
         "thirdparty/**": true,

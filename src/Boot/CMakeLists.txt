@@ -4,15 +4,17 @@ set(CMAKE_C_STANDARD_LIBRARIES "")
 add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
-    Main.c
-    PhosBoot.h
-    Debug.c
-    Debug.h
-    Guids.c
-    Memory.c
-    Memory.h
-    String.c
-    String.h)
+    "Debug.c"
+    "Debug.h"
+    "Guids.c"
+    "Loader.c"
+    "Loader.h"
+    "Main.c"
+    "Memory.c"
+    "Memory.h"
+    "PhosBoot.h"
+    "String.c"
+    "String.h")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     SUFFIX ".efi"
@@ -27,6 +29,8 @@ if(CMAKE_SIZEOF_VOID_P EQUAL 8)
     target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE "../../thirdparty/edk2/MdePkg/Include/X64")
     target_compile_options(${PROJECT_NAME} PRIVATE "-target" "x86_64-pc-win32-coff")
 elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
+    message(FATAL_ERROR "Phos should compile under x86_64.")
+
     set_target_properties(${PROJECT_NAME} PROPERTIES OUTPUT_NAME "Bootx86")
     target_compile_options(${PROJECT_NAME} PRIVATE "-target" "i386-pc-win32-coff")
 endif()

@@ -8,7 +8,7 @@
             "targetCreateCommands": [ "target create --no-dependents --arch x86_64 out/Phos/Efi/Boot/Bootx64.efi" ],
             "processCreateCommands": [ "gdb-remote localhost:1234" ],
             "preLaunchTask": "Launch QEMU (debug)"
-        },
+        } /* ,
         {
             "name": "(gdb) Launch",
             "type": "cppdbg",
@@ -33,6 +33,6 @@
                 }
             ],
             "preLaunchTask": "Launch QEMU (debug)"
-        }
+        } */
     ]
 }
