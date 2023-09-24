@@ -105,7 +105,6 @@ WriteSignedDecimal(
 	return TRUE;
 }
 
-// needs support for %S (ansi) and %s (wide)
 VOID
 PrintVariadic(
 	IN const CHAR16 *Format,
@@ -132,6 +131,32 @@ PrintVariadic(
 			FormatSpecifier ^= TRUE;
 		} else if (FormatSpecifier) {
 			switch (*Format) {
+			case L's': {
+				const CHAR16 *StringArg = VA_ARG(Args, const CHAR16 *);
+				INTN          Length    = StrLen(StringArg);
+
+				while ((i + Length + 1) * sizeof(CHAR16) >= Size)
+					RESIZE(EXTEND(Size + Length * sizeof(CHAR16), PRINT_GRANULARITY));
+				
+				CopyMemory(String + i, (VOID*)StringArg, (Length + 1) * sizeof(CHAR16));
+				i += Length - 1;
+
+				break;
+			}
+			case L'S': {
+				const CHAR8 *StringArg = VA_ARG(Args, const CHAR8 *);
+				INTN         Length    = StrLen8(StringArg);
+
+				while ((i + Length + 1) * sizeof(CHAR16) >= Size)
+					RESIZE(EXTEND(Size + Length * sizeof(CHAR16), PRINT_GRANULARITY));
+				
+				for (INTN j = 0; j < Length; j++)
+					String[i + j] = (CHAR16)StringArg[j];
+				
+				i += Length - 1;
+
+				break;
+			}
 			case L'u': {
 				UINT64 Integer = VA_ARG(Args, UINT64);
 				INTN   Length  = 0;

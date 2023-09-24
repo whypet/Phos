@@ -1,6 +1,5 @@
 #include "PhosBoot.h"
 #include "String.h"
-#include "Debug.h"
 
 #define WaitForEvent(Event) { \
 	UINTN Index = 0; \
@@ -38,10 +37,7 @@ EfiMain(
 	}
 #endif
 
-	Print(L"unsigned decimal test: %u\r\n", 0xffffffffffffffff);
-
 	WaitForEvent(&ST->ConIn->WaitForKey);
-
 Cleanup:
 	return Status;
 }
