@@ -1,5 +1,7 @@
 #pragma once
 
+#define PHOSAPI __attribute__((__ms_abi__))
+
 typedef void                   VOID;
 typedef signed char            INT8;
 typedef signed short int       INT16;
@@ -16,4 +18,7 @@ typedef signed long long int   INTN;
 typedef unsigned long long int UINTN;
 #else
 #error Phos should compile under x86_64.
+
+typedef signed long int   INTN;
+typedef unsigned long int UINTN;
 #endif
