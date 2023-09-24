@@ -1,7 +1,7 @@
 project(Boot LANGUAGES C)
 
 set(CMAKE_C_STANDARD_LIBRARIES "")
-add_executable(${PROJECT_NAME} ${UEFI_SOURCE})
+add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
     Main.c
