@@ -32,7 +32,10 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
 endif()
 
 if((CMAKE_BUILD_TYPE STREQUAL "Debug") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
-    add_definitions(-DDEBUG)
+    if(CMAKE_BUILD_TYPE STREQUAL "Debug")     
+        add_definitions(-DDEBUG)
+    endif()
+    
     target_compile_options(${PROJECT_NAME} PRIVATE "-g" "-glldb" "-gdwarf-4")
     target_link_options(${PROJECT_NAME} PRIVATE "-g" "-glldb" "-gdwarf-4")
 endif()
