@@ -135,5 +135,6 @@ const LOADER Loader = {
 	.ValidatePE64  = ValidatePE64,
 	.AllocateImage = AllocateImage,
 	.FreeImage     = FreeImage,
-	.MapSections   = MapSections
+	.MapSections   = MapSections,
+	.RelocateImage = RelocateImage
 };
