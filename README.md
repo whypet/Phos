@@ -11,7 +11,7 @@ Strings will be UTF-32 internally.
 ### Bootloader
 
 - [x] Basic string and memory functions (we aren't using the EDK II build system, this is bare bones)
-- [ ] PE loader with relocation
+- [x] PE loader with relocation *(untested)*
 
 ### Kernel
 
