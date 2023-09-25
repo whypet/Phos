@@ -2,8 +2,12 @@
 
 #include <Uefi.h>
 #include <Protocol/LoadedImage.h>
+#include <Protocol/SimpleFileSystem.h>
 
-#define EXTEND(x, y) ((((x) - 1) / (y) + 1) * (y))
+#define BLOCKS(x, Size) (((x) - 1) / (Size) + 1)
+#define ALIGN(x, Size) (BLOCKS(x, Size) * (Size))
+
+#define KERNEL_FILENAME L"Phoskrnl"
 
 extern EFI_SYSTEM_TABLE     *ST;
 extern EFI_BOOT_SERVICES    *BS;

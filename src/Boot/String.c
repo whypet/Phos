@@ -1,7 +1,7 @@
 #include "String.h"
 #include "Memory.h"
 
-#define PRINT_GRANULARITY (32 * sizeof(CHAR16))
+#define ALIGNMENT (32 * sizeof(CHAR16))
 
 INTN
 StrLen(
@@ -114,13 +114,13 @@ PrintVariadic(
 	ReallocatePool((VOID**)&String, NewSize, Size); \
 	Size = NewSize; \
 }
-	INTN    Size            = EXTEND((StrLen(Format) + 1) * sizeof(CHAR16), PRINT_GRANULARITY);
+	INTN    Size            = ALIGN((StrLen(Format) + 1) * sizeof(CHAR16), ALIGNMENT);
 	CHAR16 *String          = AllocatePool(Size);
 	BOOLEAN FormatSpecifier = FALSE;
 
 	for (INTN i = 0; *Format != 0; i++, Format++) {
 		if ((i + 1) * sizeof(CHAR16) >= Size)
-			RESIZE(Size + PRINT_GRANULARITY);
+			RESIZE(Size + ALIGNMENT);
 
 		if (*Format == L'%') {
 			if (FormatSpecifier)
@@ -136,7 +136,7 @@ PrintVariadic(
 				INTN          Length    = StrLen(StringArg);
 
 				while ((i + Length + 1) * sizeof(CHAR16) >= Size)
-					RESIZE(EXTEND(Size + Length * sizeof(CHAR16), PRINT_GRANULARITY));
+					RESIZE(ALIGN(Size + Length * sizeof(CHAR16), ALIGNMENT));
 				
 				CopyMemory(String + i, (VOID*)StringArg, (Length + 1) * sizeof(CHAR16));
 				i += Length - 1;
@@ -148,7 +148,7 @@ PrintVariadic(
 				INTN         Length    = StrLen8(StringArg);
 
 				while ((i + Length + 1) * sizeof(CHAR16) >= Size)
-					RESIZE(EXTEND(Size + Length * sizeof(CHAR16), PRINT_GRANULARITY));
+					RESIZE(ALIGN(Size + Length * sizeof(CHAR16), ALIGNMENT));
 				
 				for (INTN j = 0; j < Length; j++)
 					String[i + j] = (CHAR16)StringArg[j];
@@ -162,7 +162,7 @@ PrintVariadic(
 				INTN   Length  = 0;
 
 				while (!WriteUnsignedDecimal(Integer, &Length, String + i, Size - i * sizeof(CHAR16)))
-					RESIZE(EXTEND(Size + Length * sizeof(CHAR16), PRINT_GRANULARITY));
+					RESIZE(ALIGN(Size + Length * sizeof(CHAR16), ALIGNMENT));
 				
 				i += Length - 1;
 
@@ -173,7 +173,7 @@ PrintVariadic(
 				INTN  Length  = 0;
 
 				while (!WriteSignedDecimal(Integer, &Length, String + i, Size - i * sizeof(CHAR16)))
-					RESIZE(EXTEND(Size + Length * sizeof(CHAR16), PRINT_GRANULARITY));
+					RESIZE(ALIGN(Size + Length * sizeof(CHAR16), ALIGNMENT));
 				
 				i += Length - 1;
 
@@ -184,7 +184,7 @@ PrintVariadic(
 				INTN   Length  = 0;
 
 				while (!WriteHexadecimal(Integer, &Length, String + i, Size - i * sizeof(CHAR16)))
-					RESIZE(EXTEND(Size + Length * sizeof(CHAR16), PRINT_GRANULARITY));
+					RESIZE(ALIGN(Size + Length * sizeof(CHAR16), ALIGNMENT));
 				
 				i += Length - 1;
 
