@@ -49,3 +49,11 @@ ReallocatePool(
 
 	*Buffer = NewBuffer;
 }
+
+__attribute__((always_inline))
+VOID
+FreePool(
+	IN VOID *Buffer
+) {
+	BS->FreePool(Buffer);
+}

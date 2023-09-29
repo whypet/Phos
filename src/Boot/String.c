@@ -34,9 +34,13 @@ WriteHexadecimal(
 ) {
 	INTN _Length = 0;
 
-	for (UINT64 Temp = Integer; Temp != 0; _Length++)
-		Temp /= 16;
-	
+	if (Integer == 0)
+		_Length = 1;
+	else {
+		for (UINT64 Temp = Integer; Temp != 0; _Length++)
+			Temp /= 16;
+	}
+
 	*Length = _Length;
 
 	if (Size < (_Length + 1) * sizeof(CHAR16))
@@ -62,8 +66,12 @@ WriteUnsignedDecimal(
 ) {
 	INTN _Length = 0;
 
-	for (UINT64 Temp = Integer; Temp != 0; _Length++)
-		Temp /= 10;
+	if (Integer == 0)
+		_Length = 1;
+	else {
+		for (UINT64 Temp = Integer; Temp != 0; _Length++)
+			Temp /= 10;
+	}
 	
 	*Length = _Length;
 	
@@ -86,8 +94,12 @@ WriteSignedDecimal(
 	INTN Offset = Integer < 0 ? 1 : 0;
 	INTN _Length = Offset;
 
-	for (INT64 Temp = Integer; Temp != 0; _Length++) 
-		Temp /= 10;
+	if (Integer == 0)
+		_Length = 1;
+	else {
+		for (INT64 Temp = Integer; Temp != 0; _Length++) 
+			Temp /= 10;
+	}
 
 	*Length = _Length;
 	
@@ -131,9 +143,23 @@ PrintVariadic(
 			FormatSpecifier ^= TRUE;
 		} else if (FormatSpecifier) {
 			switch (*Format) {
+			case L'c': {
+				CHAR16 Char = VA_ARG(Args, CHAR16);
+				
+				String[i] = Char;
+
+				break;
+			}
+			case L'C': {
+				CHAR8 Char = VA_ARG(Args, CHAR8);
+				
+				String[i] = (CHAR16)Char; // zero-extend (bmp is the same for both utf-16 and ansi)
+
+				break;
+			}
 			case L's': {
-				const CHAR16 *StringArg = VA_ARG(Args, const CHAR16 *);
-				INTN          Length    = StrLen(StringArg);
+				CHAR16 *StringArg = VA_ARG(Args, CHAR16 *);
+				INTN    Length    = StrLen(StringArg);
 
 				while ((i + Length + 1) * sizeof(CHAR16) >= Size)
 					RESIZE(ALIGN(Size + Length * sizeof(CHAR16), ALIGNMENT));
@@ -144,8 +170,8 @@ PrintVariadic(
 				break;
 			}
 			case L'S': {
-				const CHAR8 *StringArg = VA_ARG(Args, const CHAR8 *);
-				INTN         Length    = StrLen8(StringArg);
+				CHAR8 *StringArg = VA_ARG(Args, CHAR8 *);
+				INTN   Length    = StrLen8(StringArg);
 
 				while ((i + Length + 1) * sizeof(CHAR16) >= Size)
 					RESIZE(ALIGN(Size + Length * sizeof(CHAR16), ALIGNMENT));

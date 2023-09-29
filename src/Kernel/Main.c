@@ -5,7 +5,8 @@ PHOSAPI
 KiMain(
 	VOID // add rsdp etc later
 ) {
-	for (;;);
+	for (;;)
+		__asm pause;
 
 	return;
 }

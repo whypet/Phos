@@ -21,7 +21,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Efi/Boot")
 
 target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE "../../thirdparty/edk2/MdePkg/Include" "../../thirdparty/edk2/MdePkg/Include/X64")
-target_compile_options(${PROJECT_NAME} PRIVATE "-mno-red-zone" "-fno-stack-protector" "-fshort-wchar" "-ffreestanding" "-fmsc-version=0")
+target_compile_options(${PROJECT_NAME} PRIVATE "-mno-red-zone" "-fno-stack-protector" "-fshort-wchar" "-ffreestanding")
 target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-subsystem:efi_application" "-Wl,-nodefaultlib" "-Wl,-entry:EfiMain")
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)

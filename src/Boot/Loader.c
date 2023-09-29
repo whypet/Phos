@@ -9,11 +9,9 @@ ValidatePE64(
 	IN UINTN       Size
 ) {
 	ASSERT(RawImage != NULL && Size > 0);
-
-	if (Size < 0x1000)
-		return FALSE;
 	
 	const IMAGE_DOS_HEADER *DosHeader = (const IMAGE_DOS_HEADER *)RawImage;
+
 	if (DosHeader->e_magic != DOS_MZ)
 		return FALSE;
 	
@@ -49,8 +47,6 @@ AllocateImage(
 		*AllocatedSize = PageCount * 4096;
 		return (VOID *)Address;
 	}
-
-	Print(L"couldn't allocate at image base.\r\n");
 
 	Status = BS->AllocatePages(
 		AllocateAnyPages,
@@ -97,8 +93,8 @@ MapSections(
 
 BOOLEAN
 RelocateImage(
-	OUT VOID                    *Image,
-	IN  IMAGE_OPTIONAL_HEADER64 *OptionalHeader
+	OUT VOID                          *Image,
+	IN  const IMAGE_OPTIONAL_HEADER64 *OptionalHeader
 ) {
 	UINTN BaseDelta = (UINTN)Image - (UINTN)OptionalHeader->ImageBase;
 

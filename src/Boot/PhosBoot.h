@@ -3,6 +3,7 @@
 #include <Uefi.h>
 #include <Protocol/LoadedImage.h>
 #include <Protocol/SimpleFileSystem.h>
+#include <Guid/FileInfo.h>
 
 #define BLOCKS(x, Size) (((x) - 1) / (Size) + 1)
 #define ALIGN(x, Size) (BLOCKS(x, Size) * (Size))

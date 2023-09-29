@@ -11,12 +11,12 @@ Strings will be UTF-32 internally.
 ### Bootloader
 
 - [x] Basic string and memory functions (we aren't using the EDK II build system, this is bare bones)
-- [x] PE loader with relocation *(untested)*
+- [x] PE loader with relocation
 
 ### Kernel
 
 - [ ] GDT (make new one after UEFI boot stage)
-- [ ] Interrupt handling (exceptions, keyboard...)
+- [ ] APIC interrupt handling (exceptions, keyboard...)
 - [ ] Kernel debugging (possibly own debugger)
 - [ ] Paging
 - [ ] Another PE loader

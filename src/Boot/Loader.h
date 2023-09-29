@@ -123,35 +123,25 @@ typedef struct {
 } IMAGE_BASE_RELOCATION;
 
 typedef struct {
-	BOOLEAN
-	(*ValidatePE64)(
+	BOOLEAN(*ValidatePE64)(
 		IN const VOID *RawImage,
-		IN UINTN       Size
-	);
+		IN UINTN       Size);
 
-	VOID *
-	(*AllocateImage)(
+	VOID *(*AllocateImage)(
 		IN  const VOID *RawImage,
-		OUT UINTN      *AllocatedSize
-	);
+		OUT UINTN      *AllocatedSize);
 
-	BOOLEAN
-	(*FreeImage)(
+	BOOLEAN(*FreeImage)(
 		IN VOID *Image,
-		IN UINTN Size
-	);
+		IN UINTN Size);
 
-	VOID
-	(*MapSections)(
+	VOID(*MapSections)(
 		OUT VOID       *Image,
-		IN  const VOID *RawImage
-	);
+		IN  const VOID *RawImage);
 
-	BOOLEAN
-	(*RelocateImage)(
-		OUT VOID                    *Image,
-		IN  IMAGE_OPTIONAL_HEADER64 *OptionalHeader
-	);
+	BOOLEAN(*RelocateImage)(
+		OUT VOID                          *Image,
+		IN  const IMAGE_OPTIONAL_HEADER64 *OptionalHeader);
 } LOADER;
 
 extern const LOADER Loader;

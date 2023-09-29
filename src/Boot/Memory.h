@@ -27,10 +27,8 @@ ReallocatePool(
 	IN     UINTN  OldSize
 );
 
+__attribute__((always_inline))
 VOID
-__forceinline
 FreePool(
 	IN VOID *Buffer
-) {
-	BS->FreePool(Buffer);
-}
+);
