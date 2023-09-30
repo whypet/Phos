@@ -3,7 +3,7 @@
 VOID
 PHOSAPI
 HalCreateGdtr(
-	IN OUT HAL_GDTR *Descriptor
+	IN OUT HALGDTR *Reg
 ) {
 	// do
 }
