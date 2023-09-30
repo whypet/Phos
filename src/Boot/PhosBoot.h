@@ -1,6 +1,7 @@
 #pragma once
 
 #include <Uefi.h>
+#include <Protocol/GraphicsOutput.h>
 #include <Protocol/LoadedImage.h>
 #include <Protocol/SimpleFileSystem.h>
 #include <Guid/FileInfo.h>
@@ -9,6 +10,13 @@
 #define ALIGN(x, Size) (BLOCKS(x, Size) * (Size))
 
 #define KERNEL_FILENAME L"Phoskrnl"
+
+typedef struct {
+	VOID  *Framebuffer;
+	UINTN  Size;
+	UINT32 Width;
+	UINT32 Height;
+} VIDEO_MODE;
 
 extern EFI_SYSTEM_TABLE     *ST;
 extern EFI_BOOT_SERVICES    *BS;

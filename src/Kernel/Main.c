@@ -3,7 +3,7 @@
 VOID
 PHOSAPI
 KiMain(
-	VOID // add rsdp etc later
+	IN VIDEO_MODE VidMode
 ) {
 	for (;;)
 		__asm pause;

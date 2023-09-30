@@ -3,8 +3,9 @@ Phosphor, called Phos for short, is a work in progress hobbyist operating system
 
 ## Design
 
-It should be a minimal x86_64 megalithic kernel fully written in C and Assembly.\
-Strings will be UTF-32 internally.
+It should be a minimal x86_64 megalithic kernel fully written in C and Assembly. \
+Strings will be UTF-32 internally. \
+Phos has no compability with other compilers or architectures and there are currently no plans to add it.
 
 ## Goals
 

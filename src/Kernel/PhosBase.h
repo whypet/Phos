@@ -2,6 +2,10 @@
 
 #define PHOSAPI __attribute__((__ms_abi__))
 
+#define IN
+#define OUT
+#define OPTIONAL
+
 typedef void                   VOID;
 typedef signed char            INT8;
 typedef signed short int       INT16;
@@ -22,3 +26,10 @@ typedef unsigned long long int UINTN;
 typedef signed long int   INTN;
 typedef unsigned long int UINTN;
 #endif
+
+typedef struct {
+	VOID  *Framebuffer;
+	UINTN  Size;
+	UINT32 Width;
+	UINT32 Height;
+} VIDEO_MODE;

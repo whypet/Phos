@@ -1,7 +1,7 @@
 {
     "configurations": [
         {
-            "name": "UEFI",
+            "name": "Phos",
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/thirdparty/edk2/MdePkg/Include",

@@ -9,7 +9,9 @@
 	BS->WaitForEvent(1, Event, &Index); \
 }
 
-typedef VOID(__attribute__((__ms_abi__)) * FnKiMain)(VOID);
+typedef VOID(__attribute__((__ms_abi__)) * FnKiMain)(
+	IN VIDEO_MODE
+);
 
 EFI_SYSTEM_TABLE     *ST;
 EFI_BOOT_SERVICES    *BS;
@@ -104,7 +106,13 @@ GetMemoryMap(
     UINTN                  _DescriptorSize    = 0;
     UINT32                 _DescriptorVersion = 0;
 
-    Status = BS->GetMemoryMap(&_MemoryMapSize, _MemoryMap, &_MapKey, &_DescriptorSize, &_DescriptorVersion);
+    Status = BS->GetMemoryMap(
+		&_MemoryMapSize,
+		_MemoryMap,
+		&_MapKey,
+		&_DescriptorSize,
+		&_DescriptorVersion);
+
     ASSERT(Status == EFI_BUFFER_TOO_SMALL);
 
     do {
@@ -119,19 +127,22 @@ GetMemoryMap(
         Status = BS->GetMemoryMap(&_MemoryMapSize, _MemoryMap, &_MapKey, &_DescriptorSize, &_DescriptorVersion);
     } while (Status == EFI_BUFFER_TOO_SMALL);
 
-	if (!EFI_ERROR(Status)) {
-		if (MemoryMap != NULL)
-			*MemoryMap = _MemoryMap;
-		if (MemoryMapSize != NULL)
-			*MemoryMapSize = _MemoryMapSize;
-		if (MapKey != NULL)
-			*MapKey = _MapKey;
-		if (DescriptorSize != NULL)
-			*DescriptorSize = _DescriptorSize;
-		if (DescriptorVersion != NULL)
-			*DescriptorVersion = _DescriptorVersion;
-	} else
+	if (EFI_ERROR(Status)) {
 		FreePool(_MemoryMap);
+
+		return Status;
+	}
+
+	if (MemoryMap != NULL)
+		*MemoryMap = _MemoryMap;
+	if (MemoryMapSize != NULL)
+		*MemoryMapSize = _MemoryMapSize;
+	if (MapKey != NULL)
+		*MapKey = _MapKey;
+	if (DescriptorSize != NULL)
+		*DescriptorSize = _DescriptorSize;
+	if (DescriptorVersion != NULL)
+		*DescriptorVersion = _DescriptorVersion;
 
     return Status;
 }
@@ -164,6 +175,13 @@ EfiMain(
 			__asm pause;
 	}
 #endif
+
+	EFI_GRAPHICS_OUTPUT_PROTOCOL *GOP = NULL;
+
+	if (EFI_ERROR(Status = BS->LocateProtocol(&gEfiGraphicsOutputProtocolGuid, NULL, (VOID**)&GOP))) {
+		Print(L"failed to get GOP.\r\n");
+		goto Cleanup;
+	}
 
 	EFI_FILE_HANDLE FileHandle = NULL;
 
@@ -233,8 +251,15 @@ EfiMain(
 			goto Cleanup;
 		}
 	}
+	
+	VIDEO_MODE VidMode = {
+		.Framebuffer = (VOID *)GOP->Mode->FrameBufferBase,
+		.Size        = GOP->Mode->FrameBufferSize,
+		.Width       = GOP->Mode->Info->HorizontalResolution,
+		.Height      = GOP->Mode->Info->VerticalResolution
+	};
 
-	KiMain();
+	KiMain(VidMode);
 
 	return EFI_SUCCESS; // this shouldn't be reached
 
