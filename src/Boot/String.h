@@ -13,19 +13,27 @@ StrLen8(
 );
 
 BOOLEAN
+WriteHexadecimal(
+	IN     UINT64  Integer,
+	IN OUT INTN   *Length,
+	IN OUT CHAR16 *String,
+	IN     INTN    Size
+);
+
+BOOLEAN
 WriteUnsignedDecimal(
-	IN  UINT64  Decimal,
-	OUT INTN   *Length,
-	OUT CHAR16 *String,
-	IN  INTN    Size
+	IN     UINT64  Decimal,
+	IN OUT INTN   *Length,
+	IN OUT CHAR16 *String,
+	IN     INTN    Size
 );
 
 BOOLEAN
 WriteSignedDecimal(
-	IN  INT64   Decimal,
-	OUT INTN   *Length,
-	OUT CHAR16 *String,
-	IN  INTN    Size
+	IN     INT64   Decimal,
+	IN OUT INTN   *Length,
+	IN OUT CHAR16 *String,
+	IN     INTN    Size
 );
 
 VOID

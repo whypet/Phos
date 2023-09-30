@@ -1,3 +1,5 @@
 #pragma once
 
-#include "PhosBase.h"
+#include <PhosBase.h>
+
+#include <Hal/Hal.h>

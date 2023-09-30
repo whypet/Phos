@@ -13,7 +13,7 @@
 
 VOID
 AssertFail(
-	const CHAR8 *Cond,
-	const CHAR8 *File,
-	INT32        Line
+	IN const CHAR8 *Cond,
+	IN const CHAR8 *File,
+	IN INT32        Line
 );

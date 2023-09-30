@@ -4,15 +4,15 @@
 
 VOID
 ZeroMemory(
-	IN VOID *Buffer,
-	IN INTN  Size
+	IN OUT VOID *Buffer,
+	IN     INTN  Size
 );
 
 VOID
 CopyMemory(
-	IN VOID *Dst,
-	IN VOID *Src,
-	IN INTN  Size
+	IN OUT VOID *Dst,
+	IN     VOID *Src,
+	IN     INTN  Size
 );
 
 VOID*
@@ -30,7 +30,7 @@ ReallocatePool(
 __forceinline
 VOID
 FreePool(
-	IN VOID *Buffer
+	IN OUT VOID *Buffer
 ) {
 	BS->FreePool(Buffer);
 }

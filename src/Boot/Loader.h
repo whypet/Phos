@@ -132,16 +132,16 @@ typedef struct {
 		OUT UINTN      *AllocatedSize);
 
 	BOOLEAN(*FreeImage)(
-		IN VOID *Image,
-		IN UINTN Size);
+		IN OUT VOID *Image,
+		IN     UINTN Size);
 
 	VOID(*MapSections)(
-		OUT VOID       *Image,
-		IN  const VOID *RawImage);
+		IN OUT VOID       *Image,
+		IN     const VOID *RawImage);
 
 	BOOLEAN(*RelocateImage)(
-		OUT VOID                          *Image,
-		IN  const IMAGE_OPTIONAL_HEADER64 *OptionalHeader);
+		IN OUT VOID                          *Image,
+		IN     const IMAGE_OPTIONAL_HEADER64 *OptionalHeader);
 } LOADER;
 
 extern const LOADER Loader;

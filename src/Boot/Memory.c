@@ -3,8 +3,8 @@
 
 VOID
 ZeroMemory(
-	IN VOID *Buffer,
-	IN INTN  Size
+	IN OUT VOID *Buffer,
+	IN     INTN  Size
 ) {
 	for (INTN i = 0; i < Size; i++)
 		*((INT8*)Buffer + i) = 0;
@@ -12,9 +12,9 @@ ZeroMemory(
 
 VOID
 CopyMemory(
-	IN VOID *Dst,
-	IN VOID *Src,
-	IN INTN  Size
+	OUT VOID *Dst,
+	IN  VOID *Src,
+	IN  INTN  Size
 ) {
 	for (INTN i = 0; i < Size; i++)
 		*((INT8*)Dst + i) = *((INT8*)Src + i);

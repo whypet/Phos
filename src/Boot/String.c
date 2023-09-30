@@ -27,10 +27,10 @@ StrLen8(
 
 BOOLEAN
 WriteHexadecimal(
-	IN  UINT64  Integer,
-	OUT INTN   *Length,
-	OUT CHAR16 *String,
-	IN  INTN    Size
+	IN     UINT64  Integer,
+	IN OUT INTN   *Length,
+	IN OUT CHAR16 *String,
+	IN     INTN    Size
 ) {
 	INTN _Length = 0;
 
@@ -59,10 +59,10 @@ WriteHexadecimal(
 
 BOOLEAN
 WriteUnsignedDecimal(
-	IN  UINT64  Integer,
-	OUT INTN   *Length,
-	OUT CHAR16 *String,
-	IN  INTN    Size
+	IN     UINT64  Integer,
+	IN OUT INTN   *Length,
+	IN OUT CHAR16 *String,
+	IN     INTN    Size
 ) {
 	INTN _Length = 0;
 
@@ -86,10 +86,10 @@ WriteUnsignedDecimal(
 
 BOOLEAN
 WriteSignedDecimal(
-	IN  INT64   Integer,
-	OUT INTN   *Length,
-	OUT CHAR16 *String,
-	IN  INTN    Size
+	IN     INT64   Integer,
+	IN OUT INTN   *Length,
+	IN OUT CHAR16 *String,
+	IN     INTN    Size
 ) {
 	INTN Offset = Integer < 0 ? 1 : 0;
 	INTN _Length = Offset;
