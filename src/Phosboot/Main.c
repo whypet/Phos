@@ -1,4 +1,4 @@
-#include "PhosBoot.h"
+#include "Phosboot.h"
 #include "Debug.h"
 #include "Loader.h"
 #include "Memory.h"
@@ -8,10 +8,6 @@
 	UINTN Index = 0; \
 	BS->WaitForEvent(1, Event, &Index); \
 }
-
-typedef VOID(__attribute__((__ms_abi__)) * FnKiMain)(
-	IN VIDEO_MODE
-);
 
 EFI_SYSTEM_TABLE     *ST;
 EFI_BOOT_SERVICES    *BS;
@@ -185,7 +181,7 @@ EfiMain(
 
 	EFI_FILE_HANDLE FileHandle = NULL;
 
-	if (EFI_ERROR(Status = OpenFile(LoadedImage, KERNEL_FILENAME, &FileHandle))) {
+	if (EFI_ERROR(Status = OpenFile(LoadedImage, KERNEL_PATH, &FileHandle))) {
 		Print(L"failed to open a handle to the kernel image.\r\n");
 		goto Cleanup;
 	}

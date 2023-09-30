@@ -1,4 +1,4 @@
-project(Kernel LANGUAGES C)
+project(Phoskrnl LANGUAGES C)
 
 set(CMAKE_C_STANDARD_LIBRARIES "")
 add_executable(${PROJECT_NAME})
@@ -11,7 +11,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 set_target_properties(${PROJECT_NAME} PROPERTIES
     SUFFIX ""
 	OUTPUT_NAME "Phoskrnl"
-    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}")
+    RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/System")
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
 target_compile_options(${PROJECT_NAME} PRIVATE "-mno-red-zone" "-fno-stack-protector" "-fshort-wchar" "-ffreestanding" "-fmsc-version=0")

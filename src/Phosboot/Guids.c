@@ -1,4 +1,4 @@
-#include "PhosBoot.h"
+#include "Phosboot.h"
 
 // Protocols
 EFI_GUID gEfiGraphicsOutputProtocolGuid   = EFI_GRAPHICS_OUTPUT_PROTOCOL_GUID;

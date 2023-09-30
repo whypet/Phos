@@ -9,7 +9,7 @@
 #define BLOCKS(x, Size) (((x) - 1) / (Size) + 1)
 #define ALIGN(x, Size) (BLOCKS(x, Size) * (Size))
 
-#define KERNEL_FILENAME L"Phoskrnl"
+#define KERNEL_PATH L"System\\Phoskrnl"
 
 typedef struct {
 	VOID  *Framebuffer;
@@ -17,6 +17,10 @@ typedef struct {
 	UINT32 Width;
 	UINT32 Height;
 } VIDEO_MODE;
+
+typedef VOID(__attribute__((__ms_abi__)) * FnKiMain)(
+	IN VIDEO_MODE
+);
 
 extern EFI_SYSTEM_TABLE     *ST;
 extern EFI_BOOT_SERVICES    *BS;
