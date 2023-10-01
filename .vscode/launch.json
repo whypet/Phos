@@ -1,13 +1,19 @@
 {
     "configurations": [
         {
-            "name": "(lldb) Launch",
+            "name": "(lldb) Launch Phos",
             "type": "lldb",
             "request": "custom",
             "expressions": "native",
-            "targetCreateCommands": [ "target create --no-dependents --arch x86_64 out/Phos/Efi/Boot/Bootx64.efi" ],
+            "targetCreateCommands": [ "target create --no-dependents --arch x86_64 ${workspaceFolder}/out/Phos/Efi/Boot/Bootx64.efi" ],
             "processCreateCommands": [ "gdb-remote localhost:1234" ],
             "preLaunchTask": "Launch QEMU (debug)"
+        },
+		{
+            "name": "(lldb) Launch Phosdb",
+            "type": "lldb",
+            "request": "launch",
+			"program": "${workspaceFolder}/out/Phosdb/Phosdb.exe"
         } /* ,
         {
             "name": "(gdb) Launch",

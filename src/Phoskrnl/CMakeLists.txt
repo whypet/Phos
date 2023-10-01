@@ -4,6 +4,8 @@ set(CMAKE_C_STANDARD_LIBRARIES "")
 add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
+	"Hal/Gdt.c"
+	"Hal/Hal.h"
     "Main.c"
     "Phos.h"
 	"PhosBase.h")

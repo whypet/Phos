@@ -1,4 +1,4 @@
-# Phos
+<h1 align="center">Phos</h1>
 
 Phosphor, called Phos for short, is a work in progress hobbyist operating system.
 
