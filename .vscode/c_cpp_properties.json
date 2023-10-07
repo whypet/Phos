@@ -5,10 +5,15 @@
             "includePath": [
                 "${workspaceFolder}/**",
                 "${workspaceFolder}/thirdparty/edk2/MdePkg/Include",
-                "${workspaceFolder}/thirdparty/edk2/MdePkg/Include/X64"
+                "${workspaceFolder}/thirdparty/edk2/MdePkg/Include/X64",
+				"${workspaceFolder}/thirdparty/imgui",
+				"${workspaceFolder}/thirdparty/imgui/backends",
+				"${workspaceFolder}/thirdparty/imgui/misc",
+				"${workspaceFolder}/thirdparty/DirectXMath/Inc"
             ],
             "compilerPath": "C:/Program Files/LLVM/bin/clang.exe",
             "cStandard": "c17",
+			"cppStandard": "c++20",
             "intelliSenseMode": "clang-x64",
             "configurationProvider": "ms-vscode.cpptools"
         }

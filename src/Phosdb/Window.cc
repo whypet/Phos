@@ -1,5 +1,6 @@
-#include "Window.h"
+#include "Window.hh"
 
+namespace Phosdb {
 WNDCLASSEXW Window::WindowClass = { .cbSize = sizeof(WNDCLASSEXW) };
 ATOM        Window::Atom        = 0;
 
@@ -14,6 +15,11 @@ LRESULT Window::WndProc(
 		GWLP_USERDATA);
 
 	Window *This = reinterpret_cast<Window *>(UserData);
+	if (This == NULL)
+		return DefWindowProcW(WindowHandle, Message, WParam, LParam);
+
+	if (This->Procedure != NULL && This->Procedure(WindowHandle, Message, WParam, LParam))
+		return 0;
 
 	switch (Message) {
 	default:
@@ -45,7 +51,20 @@ BOOL Window::Initialize() {
 	return Atom != 0;
 }
 
-Window::Window(PCWSTR Title, INT32 Width, INT32 Height) {
+VOID Window::Destroy() {
+	UnregisterClassW(WindowClass.lpszClassName, WindowClass.hInstance);
+}
+
+Window::Window(
+	PCWSTR Title,
+	INT32  Width,
+	INT32  Height
+) {
+	RECT Rectangle = { 0, 0, Width, Height };
+
+	if (!AdjustWindowRectEx(&Rectangle, WS_OVERLAPPEDWINDOW & ~WS_OVERLAPPED, FALSE, 0))
+		return;
+
 	WindowHandle = CreateWindowExW(
 		0,
 		reinterpret_cast<PCWSTR>(Atom),
@@ -53,8 +72,8 @@ Window::Window(PCWSTR Title, INT32 Width, INT32 Height) {
 		WS_OVERLAPPEDWINDOW,
 		CW_USEDEFAULT,
 		CW_USEDEFAULT,
-		Width,
-		Height,
+		Rectangle.right - Rectangle.left,
+		Rectangle.bottom - Rectangle.top,
 		NULL,
 		NULL,
 		WindowClass.hInstance,
@@ -69,21 +88,34 @@ Window::Window(PCWSTR Title, INT32 Width, INT32 Height) {
 		reinterpret_cast<LONG_PTR>(this));
 }
 
-BOOL Window::PollMessages() {
-	BOOL Result;
-	MSG  Message = { 0 };
+Window::Window(
+	PCWSTR  Title,
+	INT32   Width,
+	INT32   Height,
+	WNDPROC Procedure
+) : Window(Title, Width, Height)
+{
+	this->Procedure = Procedure;
+}
 
-	while ((Result = GetMessageW(&Message, WindowHandle, 0, 0)) != 0) {
-		if (Result == -1)
-			return FALSE;
-		
+RECT Window::GetRectangle() const {
+	RECT Rectangle = { 0 };
+
+	GetClientRect(WindowHandle, &Rectangle);
+
+	return Rectangle;
+}
+
+VOID Window::PollMessages() const {
+	MSG Message = { 0 };
+
+	while (PeekMessageW(&Message, WindowHandle, 0, 0, PM_REMOVE)) {
 		TranslateMessage(&Message); 
         DispatchMessageW(&Message); 
 	}
-
-	return TRUE;
 }
 
 Window::~Window() {
 	PostMessageW(WindowHandle, WM_CLOSE, 0, 0);
+}
 }

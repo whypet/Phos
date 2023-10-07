@@ -1,3 +1,12 @@
 [submodule "thirdparty/edk2"]
 	path = thirdparty/edk2
 	url = https://github.com/tianocore/edk2
+[submodule "thirdparty/imgui"]
+	path = thirdparty/imgui
+	url = https://github.com/ocornut/imgui
+[submodule "thirdparty/freetype"]
+	path = thirdparty/freetype
+	url = https://github.com/freetype/freetype
+[submodule "thirdparty/DirectXMath"]
+	path = thirdparty/DirectXMath
+	url = https://github.com/microsoft/DirectXMath

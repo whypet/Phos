@@ -13,7 +13,15 @@
             "name": "(lldb) Launch Phosdb",
             "type": "lldb",
             "request": "launch",
-			"program": "${workspaceFolder}/out/Phosdb/Phosdb.exe"
+			"program": "${workspaceFolder}/out/Phosdb/Phosdb.exe",
+			"cwd": "${workspaceFolder}/out/Phosdb"
+        },
+		{
+            "name": "(gdb) Launch Phosdb",
+            "type": "cppdbg",
+            "request": "launch",
+			"program": "${workspaceFolder}/out/Phosdb/Phosdb.exe",
+			"cwd": "${workspaceFolder}/out/Phosdb"
         } /* ,
         {
             "name": "(gdb) Launch",
