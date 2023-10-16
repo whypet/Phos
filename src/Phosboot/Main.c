@@ -248,14 +248,14 @@ EfiMain(
 		}
 	}
 	
-	VIDEO_MODE VidMode = {
+	VIDEO_INFO Video = {
 		.Framebuffer = (VOID *)GOP->Mode->FrameBufferBase,
 		.Size        = GOP->Mode->FrameBufferSize,
 		.Width       = GOP->Mode->Info->HorizontalResolution,
 		.Height      = GOP->Mode->Info->VerticalResolution
 	};
 
-	KiMain(VidMode);
+	KiMain(Video);
 
 	return EFI_SUCCESS; // this shouldn't be reached
 

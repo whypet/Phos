@@ -32,4 +32,4 @@ typedef struct {
 	UINTN  Size;
 	UINT32 Width;
 	UINT32 Height;
-} VIDEO_MODE;
+} VIDEO_INFO;

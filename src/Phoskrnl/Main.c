@@ -3,7 +3,7 @@
 VOID
 PHOSAPI
 KiMain(
-	IN VIDEO_MODE VidMode
+	IN VIDEO_INFO Video
 ) {
 	for (;;)
 		__asm pause;

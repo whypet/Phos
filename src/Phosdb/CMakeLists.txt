@@ -50,7 +50,7 @@ target_sources(${PROJECT_NAME} PRIVATE
 	"Direct3D.cc"
 	"Direct3D.hh"
 	"ImConfig.hh"
-    "Main.cc"
+	"Main.cc"
 	"Phosdb.cc"
 	"Phosdb.hh"
 	"Window.cc"

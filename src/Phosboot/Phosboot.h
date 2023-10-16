@@ -16,10 +16,10 @@ typedef struct {
 	UINTN  Size;
 	UINT32 Width;
 	UINT32 Height;
-} VIDEO_MODE;
+} VIDEO_INFO;
 
 typedef VOID(__attribute__((__ms_abi__)) * FnKiMain)(
-	IN VIDEO_MODE
+	IN VIDEO_INFO
 );
 
 extern EFI_SYSTEM_TABLE     *ST;
