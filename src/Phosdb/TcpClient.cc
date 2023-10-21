@@ -16,7 +16,7 @@ TcpClient::TcpClient(
 	const std::wstring &IpAddress,
 	UINT16              Port
 ) {
-	INT Result;
+	INT32 Result;
 
 	this->IpAddress = IpAddress;
 	this->Port      = Port;
@@ -28,7 +28,7 @@ TcpClient::TcpClient(
 	Hints.ai_socktype = SOCK_STREAM;
 	Hints.ai_protocol = IPPROTO_TCP;
 
-	LOG(Trace, "Getting address info");
+	LOG(Trace, "Getting Winsock address info.");
 
 	Result = GetAddrInfoW(
 		IpAddress.c_str(),
@@ -38,7 +38,7 @@ TcpClient::TcpClient(
 	
 	if (Result != 0) {
 		LOG(Error,
-			"WinSock2: Failed to get address info.\nError code: %d",
+			"Failed to get Winsock address info.\nError code: %d",
 			WSAGetLastError());
 
 		return;
@@ -50,7 +50,7 @@ TcpClient::TcpClient(
 
 	if (Socket == INVALID_SOCKET) {
 		LOG(Error,
-			"WinSock2: Failed to create socket.\nError code: %d",
+			"Failed to create socket.\nError code: %d",
 			WSAGetLastError());
 
 		FreeAddrInfoW(AddrInfo);
@@ -66,28 +66,77 @@ TcpClient::TcpClient(
 
 		RtlIpv4AddressToStringW(&AddrIn->sin_addr, Address);
 		
-		LOG(Trace, "Trying to connect to %S", Address);
+		LOG(Trace, "Trying to connect to %S...", Address);
 
 		Result = connect(
 			Socket,
 			NextAddrInfo->ai_addr,
-			(INT)NextAddrInfo->ai_addrlen);
+			(INT32)NextAddrInfo->ai_addrlen);
 		
 	 	NextAddrInfo = NextAddrInfo->ai_next;
 	} while (Result == SOCKET_ERROR && NextAddrInfo != NULL);
 
-	FreeAddrInfoW(AddrInfo);
-
 	if (Result == SOCKET_ERROR) {
+		UINT32 ErrorCode = WSAGetLastError();
+		
 		closesocket(Socket);
+
+		WSASetLastError(ErrorCode);
 		Socket = INVALID_SOCKET;
 	}
 
 	if (Socket == INVALID_SOCKET) {
 		LOG(Error,
-			"WinSock2: Failed to connect to socket.\nError code: %d",
+			"Failed to connect to socket.\nError code: %d",
 			WSAGetLastError());
+
+		FreeAddrInfoW(AddrInfo);
+
+		return;
 	}
+
+	FreeAddrInfoW(AddrInfo);
+
+	// Enable non-blocking mode
+	ULONG Mode = 1;
+	ioctlsocket(Socket, FIONBIO, &Mode);
+}
+
+BOOL TcpClient::Receive(
+	std::vector<UINT8> &Data,
+	UINTN              *BytesReceived
+) const {
+	UINT8 Buffer[4096];
+	UINTN Result;
+
+	if (BytesReceived != NULL)
+		*BytesReceived = 0;
+
+	do {
+		Result = recv(Socket, reinterpret_cast<char *>(Buffer), sizeof(Buffer), 0);
+
+		INT32 ErrorCode = WSAGetLastError();
+
+		if (ErrorCode == WSAEWOULDBLOCK)
+			return TRUE;
+
+		if (Result == SOCKET_ERROR) {
+			LOG(Error,
+				"Failed to receive data from socket.\nError code: %d",
+				ErrorCode);
+
+			return FALSE;
+		}
+
+		if (Result > 0) {
+			Data.insert(Data.begin(), Buffer, Buffer + Result);
+
+			if (BytesReceived != NULL)
+				*BytesReceived += Result;
+		}
+	} while (Result > 0);
+
+	return TRUE;
 }
 
 TcpClient::~TcpClient() {

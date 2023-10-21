@@ -7,8 +7,13 @@ KiMain(
 ) {
 	HalInitSerial(COM1);
 
-	for (;;)
+	HalWriteSerial(COM1, 'a');
+	HalWriteSerial(COM1, 'b');
+	HalWriteSerial(COM1, 'c');
+
+	for (;;) {
 		__asm__ __volatile__("pause");
+	}
 
 	return;
 }

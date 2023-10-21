@@ -31,6 +31,25 @@ INT32 Main::Entry() {
 
 	Phosdb::TcpClient Client(L"localhost", 8888);
 
+	// works with QEMU! hooray
+#if 1
+	for (;;) {
+		std::vector<UINT8> Data;
+		UINTN BytesReceived = 0;
+		BOOL Result;
+
+		do {
+			Result = Client.Receive(Data, &BytesReceived);
+		} while (BytesReceived == 0 && Result);
+
+		if (!Result)
+			return 1;
+
+		Data.push_back(0);
+		printf("> %s\n", reinterpret_cast<const CHAR *>(&Data[0]));
+	}
+#endif
+
 	LOG(Info, "Creating window...");
 
 	Phosdb::Window::Initialize();
@@ -158,6 +177,8 @@ INT32 Main::Entry() {
 	ImGui::DestroyContext();
 
 	Phosdb::Window::Destroy();
+
+	Phosdb::TcpClient::Destroy();
 
 	return 0;
 }

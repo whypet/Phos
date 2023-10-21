@@ -56,7 +56,7 @@ However, since this is UEFI, there's still a lot that is done for us that we don
 *Phosdb only runs under Windows due to Direct3D and WinAPI usage.*
 
 - [x] Initialize D3D11 and ImGui
-- [ ] Read from serial ports with QEMU
+- [ ] Read from serial ports with QEMU (TCP/IP server)
 - [ ] Memory view
 - [ ] DWARF debug info parsing
 - [ ] Source code view & walking the stack

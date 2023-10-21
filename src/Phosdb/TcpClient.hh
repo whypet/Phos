@@ -19,7 +19,12 @@ public:
 		UINT16              Port
 	);
 
-	inline BOOL IsValid() {
+	BOOL Receive(
+		std::vector<UINT8> &Data,
+		UINTN              *BytesReceived
+	) const;
+
+	inline BOOL IsValid() const {
 		return Socket != INVALID_SOCKET;
 	}
 

@@ -3,8 +3,9 @@
 #include <stdarg.h>
 #include <stdio.h>
 
-#include <string>
 #include <format>
+#include <string>
+#include <vector>
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
