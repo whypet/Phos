@@ -1,5 +1,7 @@
 project(Phosdb LANGUAGES CXX)
 
+option(WINDOWS_SUBSYSTEM "Compiles using the Windows subsystem.")
+
 if (FALSE)
 	function(copy_directory target directory)
 		add_custom_command(
@@ -46,8 +48,6 @@ target_compile_options(ImGui PUBLIC "-DIMGUI_USER_CONFIG=\"${CMAKE_CURRENT_SOURC
 
 add_executable(${PROJECT_NAME})
 
-option(WINDOWS_SUBSYSTEM "Compiles using the Windows subsystem.")
-
 target_sources(${PROJECT_NAME} PRIVATE
 	"Direct3D.cc"
 	"Direct3D.hh"
@@ -58,8 +58,12 @@ target_sources(${PROJECT_NAME} PRIVATE
 	"Phosdb.hh"
 	"TcpClient.cc"
 	"TcpClient.hh"
+	"Util.cc"
+	"Util.hh"
 	"Window.cc"
 	"Window.hh")
+
+set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 
 target_compile_options(${PROJECT_NAME} PRIVATE "-fshort-wchar")
 target_link_libraries(${PROJECT_NAME} PRIVATE ImGui freetype "d3d11.lib" "ws2_32.lib" "ntdll.lib")

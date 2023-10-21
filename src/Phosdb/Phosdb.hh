@@ -4,8 +4,7 @@
 #include <stdio.h>
 
 #include <string>
-#include <locale>
-#include <codecvt>
+#include <format>
 
 #define WIN32_LEAN_AND_MEAN
 #include <Windows.h>
@@ -26,7 +25,5 @@
 
 using INTN  = LONG_PTR;
 using UINTN = ULONG_PTR;
-
-#define WIDE_PREFIX(x) L ## #x
 
 extern IMGUI_IMPL_API LRESULT ImGui_ImplWin32_WndProcHandler(HWND WindowHandle, UINT32 Message, WPARAM WParam, LPARAM LParam);

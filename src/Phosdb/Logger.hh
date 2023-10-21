@@ -2,25 +2,24 @@
 
 #include "Phosdb.hh"
 
-static std::wstring MakeLogScope(
-	const std::wstring &PrettyFunction
+static std::string MakeLogScope(
+	const std::string &PrettyFunction
 ) {
 	UINTN Position;
-
-	std::wstring Where(PrettyFunction);
+	std::string Where(PrettyFunction);
 	
-	Position = Where.find_last_of(L"(");
-	if (Position != std::wstring::npos)
+	Position = Where.find_last_of("(");
+	if (Position != std::string::npos)
 		Where = Where.substr(0, Position);
 	
-	Position = Where.find_first_of(L"::");
-	if (Position != std::wstring::npos)
+	Position = Where.find_first_of("::");
+	if (Position != std::string::npos)
 		Where = Where.substr(Position + 2);
 	
 	return Where;
 }
 
-#define LOG(Type, Format, ...) Phosdb::Logger::Log(Phosdb::Logger::Type, MakeLogScope(WIDE_PREFIX(__PRETTY_FUNCTION__)).c_str(), Format, __VA_ARGS__)
+#define LOG(Type, Format, ...) Phosdb::Logger::Log(Phosdb::Logger::Type, MakeLogScope(__PRETTY_FUNCTION__).c_str(), Format, __VA_ARGS__)
 
 namespace Phosdb {
 class Logger {
@@ -33,9 +32,9 @@ public:
 	};
 
 	static VOID Log(
-		INT32  Type,
-		PCWSTR Scope,
-		PCWSTR Format,
+		INT32       Type,
+		const CHAR *Scope,
+		const CHAR *Format,
 		...
 	);
 };

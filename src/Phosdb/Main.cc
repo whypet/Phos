@@ -28,10 +28,10 @@ INT32 main() {
 
 INT32 Main::Entry() {
 	Phosdb::TcpClient::Initialize();
-	
+
 	Phosdb::TcpClient Client(L"localhost", 8888);
 
-	LOG(Info, L"Creating window...");
+	LOG(Info, "Creating window...");
 
 	Phosdb::Window::Initialize();
 
@@ -39,7 +39,7 @@ INT32 Main::Entry() {
 
 	if (!Wnd.IsValid()) {
 		LOG(Error,
-			L"Failed to create window.\nError code: %d",
+			"Failed to create window.\nError code: %d",
 			GetLastError());
 
 		return 1;
@@ -49,7 +49,7 @@ INT32 Main::Entry() {
 
 	if (!D3D.IsValid()) {
 		LOG(Error,
-			L"Failed to initialize Direct3D 11.\nHRESULT status: 0x%08x",
+			"Failed to initialize Direct3D 11.\nHRESULT status: 0x%08x",
 			D3D.GetLastResult());
 
 		return 1;
@@ -123,7 +123,7 @@ INT32 Main::Entry() {
 
 			if (!D3D.IsValid()) {
 				LOG(Error,
-					L"Failed to resize buffers.\nHRESULT status: 0x%08x",
+					"Failed to resize buffers.\nHRESULT status: 0x%08x",
 					D3D.GetLastResult());
 
 				break;

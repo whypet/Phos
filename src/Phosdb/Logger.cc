@@ -1,10 +1,11 @@
 #include "Logger.hh"
+#include "Util.hh"
 
 namespace Phosdb {
 VOID Logger::Log(
-	INT32  Type,
-	PCWSTR Scope,
-	PCWSTR Format,
+	INT32       Type,
+	const CHAR *Scope,
+	const CHAR *Format,
 	...
 ) {
 #if !DEBUG
@@ -15,38 +16,43 @@ VOID Logger::Log(
 	va_list Args;
 	va_start(Args, Format);
 
-	INT32 Length = _vscwprintf(Format, Args);
-	PWSTR Text = static_cast<PWSTR>(HeapAlloc(GetProcessHeap(), HEAP_ZERO_MEMORY, (Length + 1) * sizeof(WCHAR)));
+	INT32 Length = _vscprintf(Format, Args);
+	CHAR *Text = new CHAR[Length + 1];
 
-	vswprintf(Text, Length + 1, Format, Args);
+	vsnprintf(Text, Length + 1, Format, Args);
 
 	va_end(Args);
 
-	PCWSTR TypeSz;
+	const CHAR *TypeString;
 
 	switch (Type) {
 	case Trace:
-		TypeSz = L"dbg";
+		TypeString = "dbg";
 		break;
 	case Info:
-		TypeSz = L"inf";
+		TypeString = "inf";
 		break;
 	case Warn:
-		TypeSz = L"wrn";
+		TypeString = "wrn";
 		break;
 	case Error:
-		TypeSz = L"err";
+		TypeString = "err";
 		break;
 	}
 
 	SYSTEMTIME Time = { 0 };
 	GetLocalTime(&Time);
 
-	wprintf(L"[%02d:%02d:%02d] (%s) [%s] %s\n", Time.wHour, Time.wMinute, Time.wSecond, TypeSz, Scope, Text);
+	printf("[%02d:%02d:%02d] (%s) [%s] %s\n", Time.wHour, Time.wMinute, Time.wSecond, TypeString, Scope, Text);
 
-	if (Type == Error)
-		MessageBoxW(NULL, Text, L"Phosdb", MB_ICONERROR);
+	if (Type == Error) {
+		MessageBoxW(
+			NULL,
+			Util::Utf8ToWide(std::string(Text)).c_str(),
+			std::format(L"Phosdb ({})", Util::Utf8ToWide(std::string(Scope))).c_str(),
+			MB_ICONERROR);
+	}
 
-	HeapFree(GetProcessHeap(), 0, Text);
+	delete[] Text;
 }
 };

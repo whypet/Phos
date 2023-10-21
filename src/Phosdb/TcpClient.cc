@@ -28,7 +28,7 @@ TcpClient::TcpClient(
 	Hints.ai_socktype = SOCK_STREAM;
 	Hints.ai_protocol = IPPROTO_TCP;
 
-	LOG(Trace, L"Getting address info");
+	LOG(Trace, "Getting address info");
 
 	Result = GetAddrInfoW(
 		IpAddress.c_str(),
@@ -38,19 +38,19 @@ TcpClient::TcpClient(
 	
 	if (Result != 0) {
 		LOG(Error,
-			L"WinSock2: Failed to get address info.\nError code: %d",
+			"WinSock2: Failed to get address info.\nError code: %d",
 			WSAGetLastError());
 
 		return;
 	}
 	
-	LOG(Trace, L"Creating socket");
+	LOG(Trace, "Creating socket");
 	
 	Socket = socket(AddrInfo->ai_family, AddrInfo->ai_socktype, AddrInfo->ai_protocol);
 
 	if (Socket == INVALID_SOCKET) {
 		LOG(Error,
-			L"WinSock2: Failed to create socket.\nError code: %d",
+			"WinSock2: Failed to create socket.\nError code: %d",
 			WSAGetLastError());
 
 		FreeAddrInfoW(AddrInfo);
@@ -66,7 +66,7 @@ TcpClient::TcpClient(
 
 		RtlIpv4AddressToStringW(&AddrIn->sin_addr, Address);
 		
-		LOG(Trace, L"Trying to connect to %s", Address);
+		LOG(Trace, "Trying to connect to %S", Address);
 
 		Result = connect(
 			Socket,
@@ -85,7 +85,7 @@ TcpClient::TcpClient(
 
 	if (Socket == INVALID_SOCKET) {
 		LOG(Error,
-			L"WinSock2: Failed to connect to socket.\nError code: %d",
+			"WinSock2: Failed to connect to socket.\nError code: %d",
 			WSAGetLastError());
 	}
 }
