@@ -5,8 +5,10 @@ PHOSAPI
 KiMain(
 	IN VIDEO_INFO Video
 ) {
+	HalInitSerial(COM1);
+
 	for (;;)
-		__asm pause;
+		__asm__ __volatile__("pause");
 
 	return;
 }

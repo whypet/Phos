@@ -35,11 +35,12 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
     target_compile_options(${PROJECT_NAME} PRIVATE "-target" "i386-pc-win32-coff")
 endif()
 
-if((CMAKE_BUILD_TYPE STREQUAL "Debug") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")     
-        add_definitions(-DDEBUG)
-    endif()
-    
+if(PHOSBOOT_DEBUG STREQUAL "YES")
+	add_compile_definitions(DEBUGGER)
+endif()
+
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	add_compile_definitions(DEBUG)
     target_compile_options(${PROJECT_NAME} PRIVATE "-g" "-glldb" "-gdwarf-4")
     target_link_options(${PROJECT_NAME} PRIVATE "-g" "-glldb" "-gdwarf-4")
 endif()

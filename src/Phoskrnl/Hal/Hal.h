@@ -2,6 +2,16 @@
 
 #include <PhosBase.h>
 
+#define COM1 0x3F8
+
+#define UART_IER 1
+#define UART_FCR 2
+#define UART_LCR 3
+#define UART_MCR 4
+#define UART_LSR 5
+#define UART_MSR 6
+#define UART_SCR 7
+
 #pragma pack(push, 1)
 
 typedef struct {
@@ -52,3 +62,28 @@ HalLoadGdtr(
 ) {
 	__asm lgdt [Reg];
 }
+
+BOOL
+PHOSAPI
+HalInitSerial(
+	IN UINT16 Port 
+);
+
+UINT8
+PHOSAPI
+HalPollSerial(
+	IN UINT16 Port 
+);
+
+UINT8
+PHOSAPI
+HalReadSerial(
+	IN UINT16 Port 
+);
+
+VOID
+PHOSAPI
+HalWriteSerial(
+	IN UINT16 Port,
+	IN UINT8  Value
+);

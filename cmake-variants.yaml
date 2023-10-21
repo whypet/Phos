@@ -1,0 +1,25 @@
+buildType:
+  default: debug
+  choices:
+    debug:
+      short: Debug
+      long: No optimizations and emit debug information
+      buildType: Debug
+    release:
+      short: Release
+      long: Optimize generated code
+      buildType: Release
+
+phosbootDebugger:
+  default: no
+  choices:
+    no:
+      short: Phosboot w/o debugger
+      long: Don't wait for debugger in Phosboot
+      settings:
+        PHOSBOOT_DEBUG: NO
+    yes:
+      short: Phosboot w/ debugger
+      long: Wait for debugger in Phosboot
+      settings:
+        PHOSBOOT_DEBUG: YES

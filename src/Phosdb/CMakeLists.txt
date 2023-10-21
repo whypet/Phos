@@ -63,11 +63,8 @@ target_link_libraries(${PROJECT_NAME} PRIVATE ImGui freetype "d3d11.lib" "dwmapi
 add_definitions(-DUNICODE)
 add_definitions(-D_UNICODE)
 
-if((CMAKE_BUILD_TYPE STREQUAL "Debug") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")     
-        add_definitions(-DDEBUG)
-    endif()
-    
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	add_compile_definitions(DEBUG)
     target_compile_options(${PROJECT_NAME} PRIVATE "-g" "-ggdb" "-gdwarf-4")
     target_link_options(${PROJECT_NAME} PRIVATE "-g" "-ggdb" "-gdwarf-4")
 endif()

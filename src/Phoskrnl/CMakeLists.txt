@@ -4,8 +4,7 @@ set(CMAKE_C_STANDARD_LIBRARIES "")
 add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
-	"Hal/Gdt.c"
-	"Hal/Hal.h"
+	"Hal/Hal.h" "Hal/Gdt.c"  "Hal/Serial.c"
     "Main.c"
     "Phos.h"
 	"PhosBase.h")
@@ -16,7 +15,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/System")
 
 target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
-target_compile_options(${PROJECT_NAME} PRIVATE "-mno-red-zone" "-fno-stack-protector" "-fshort-wchar" "-ffreestanding" "-fmsc-version=0")
+target_compile_options(${PROJECT_NAME} PRIVATE "-mno-red-zone" "-fno-stack-protector" "-fno-short-wchar" "-ffreestanding" "-fmsc-version=0")
 target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-subsystem:native" "-Wl,-nodefaultlib" "-Wl,-entry:KiMain")
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
@@ -27,11 +26,8 @@ elseif(CMAKE_SIZEOF_VOID_P EQUAL 4)
 	target_compile_options(${PROJECT_NAME} PRIVATE "-target" "i386-pc-win32-coff")
 endif()
 
-if((CMAKE_BUILD_TYPE STREQUAL "Debug") OR (CMAKE_BUILD_TYPE STREQUAL "RelWithDebInfo"))
-    if(CMAKE_BUILD_TYPE STREQUAL "Debug")     
-        add_definitions(-DDEBUG)
-    endif()
-    
+if(CMAKE_BUILD_TYPE STREQUAL "Debug")
+	add_compile_definitions(DEBUG)
     target_compile_options(${PROJECT_NAME} PRIVATE "-g" "-glldb" "-gdwarf-4")
     target_link_options(${PROJECT_NAME} PRIVATE "-g" "-glldb" "-gdwarf-4")
 endif()

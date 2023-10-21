@@ -1,12 +1,20 @@
 #pragma once
 
+#include <stddef.h>
+
 #define PHOSAPI __attribute__((__ms_abi__))
 
 #define IN
 #define OUT
 #define OPTIONAL
 
+#define FALSE 0
+#define TRUE  1
+
 typedef void                   VOID;
+typedef unsigned char          BOOL;
+typedef wchar_t                CHAR;
+typedef unsigned char          CHAR8;
 typedef signed char            INT8;
 typedef signed short int       INT16;
 typedef signed long int        INT32;
@@ -27,9 +35,11 @@ typedef signed long int   INTN;
 typedef unsigned long int UINTN;
 #endif
 
+#include <Intrinsics.h>
+
 typedef struct {
-	VOID  *Framebuffer;
-	UINTN  Size;
-	UINT32 Width;
-	UINT32 Height;
+	volatile VOID *Framebuffer;
+	UINTN          Size;
+	UINT32         Width;
+	UINT32         Height;
 } VIDEO_INFO;

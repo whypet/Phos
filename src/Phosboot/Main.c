@@ -162,7 +162,7 @@ EfiMain(
 		goto Cleanup;
 	}
 	
-#if DEBUG
+#if DEBUGGER
 	{
 		Print(L"image base: 0x%x; waiting for debugger.\r\n\r\n", LoadedImage->ImageBase);
 
