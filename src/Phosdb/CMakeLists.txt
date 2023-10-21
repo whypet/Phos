@@ -46,22 +46,31 @@ target_compile_options(ImGui PUBLIC "-DIMGUI_USER_CONFIG=\"${CMAKE_CURRENT_SOURC
 
 add_executable(${PROJECT_NAME})
 
+option(WINDOWS_SUBSYSTEM "Compiles using the Windows subsystem.")
+
 target_sources(${PROJECT_NAME} PRIVATE
 	"Direct3D.cc"
 	"Direct3D.hh"
 	"ImConfig.hh"
+	"Logger.cc"
+	"Logger.hh"
 	"Main.cc"
-	"Phosdb.cc"
 	"Phosdb.hh"
+	"TcpClient.cc"
+	"TcpClient.hh"
 	"Window.cc"
 	"Window.hh")
 
-target_link_libraries(${PROJECT_NAME} PRIVATE ImGui freetype "d3d11.lib" "dwmapi.lib")
-# target_compile_options(${PROJECT_NAME} PRIVATE "-DWINMAIN")
-# target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-subsystem:windows")
+target_compile_options(${PROJECT_NAME} PRIVATE "-fshort-wchar")
+target_link_libraries(${PROJECT_NAME} PRIVATE ImGui freetype "d3d11.lib" "ws2_32.lib" "ntdll.lib")
 
-add_definitions(-DUNICODE)
-add_definitions(-D_UNICODE)
+if (WINDOWS_SUBSYSTEM)
+	add_compile_definitions(WINMAIN)
+	target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-subsystem:windows")
+endif()
+
+add_compile_definitions(UNICODE)
+add_compile_definitions(_UNICODE)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	add_compile_definitions(DEBUG)

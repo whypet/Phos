@@ -1,35 +1,44 @@
 #include "Phosdb.hh"
-#include "Window.hh"
+#include "Logger.hh"
 #include "Direct3D.hh"
+#include "TcpClient.hh"
+#include "Window.hh"
 
-INT Entry();
+class Main {
+public:
+	static INT32 Entry();
+};
 
 #ifdef WINMAIN
-INT
+INT32
 WINAPI
 wWinMain(
 	HINSTANCE Instance,
 	HINSTANCE PrevInstance,
 	PWSTR     CmdLine,
-	INT       CmdShow
+	INT32     CmdShow
 ) {
 	return Entry();
 }
 #else
-INT
-main() {
-	return Entry();
+INT32 main() {
+	return Main::Entry();
 }
 #endif
 
-INT
-Entry() {
+INT32 Main::Entry() {
+	Phosdb::TcpClient::Initialize();
+	
+	Phosdb::TcpClient Client(L"localhost", 8888);
+
+	LOG(Info, L"Creating window...");
+
 	Phosdb::Window::Initialize();
 
 	Phosdb::Window Wnd(L"Phosdb", 1024, 576, ImGui_ImplWin32_WndProcHandler);
 
 	if (!Wnd.IsValid()) {
-		Log(LOG::Error,
+		LOG(Error,
 			L"Failed to create window.\nError code: %d",
 			GetLastError());
 
@@ -39,7 +48,7 @@ Entry() {
 	Phosdb::Direct3D D3D(Wnd);
 
 	if (!D3D.IsValid()) {
-		Log(LOG::Error,
+		LOG(Error,
 			L"Failed to initialize Direct3D 11.\nHRESULT status: 0x%08x",
 			D3D.GetLastResult());
 
@@ -47,9 +56,9 @@ Entry() {
 	}
 
 	IMGUI_CHECKVERSION();
-    ImGui::CreateContext();
+	ImGui::CreateContext();
 
-    ImGuiIO& io = ImGui::GetIO();
+	ImGuiIO& io = ImGui::GetIO();
 	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
 	ImFontConfig cfg;
@@ -113,7 +122,7 @@ Entry() {
 			D3D.Resize(NewWidth, NewHeight);
 
 			if (!D3D.IsValid()) {
-				Log(LOG::Error,
+				LOG(Error,
 					L"Failed to resize buffers.\nHRESULT status: 0x%08x",
 					D3D.GetLastResult());
 

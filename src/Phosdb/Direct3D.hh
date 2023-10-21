@@ -16,7 +16,9 @@ public:
 	ComPtr<ID3D11Texture2D>        Backbuffer;
 	ComPtr<ID3D11RenderTargetView> RenderTarget;
 
-	Direct3D(const Window &Wnd);
+	Direct3D(
+		const Window &Wnd
+	);
 
 	inline BOOL IsValid() const {
 		return SwapChain != NULL && Device != NULL && Context != NULL && Backbuffer != NULL && RenderTarget != NULL;

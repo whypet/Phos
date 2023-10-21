@@ -1,11 +1,17 @@
-#include "Phosdb.hh"
+#include "Logger.hh"
 
-VOID
-Log(
-	IN LOG    Type,
-	IN PCWSTR Format,
+namespace Phosdb {
+VOID Logger::Log(
+	INT32  Type,
+	PCWSTR Scope,
+	PCWSTR Format,
 	...
 ) {
+#if !DEBUG
+	if (Type == Trace)
+		return;
+#endif
+
 	va_list Args;
 	va_start(Args, Format);
 
@@ -19,13 +25,16 @@ Log(
 	PCWSTR TypeSz;
 
 	switch (Type) {
-	case LOG::Info:
+	case Trace:
+		TypeSz = L"dbg";
+		break;
+	case Info:
 		TypeSz = L"inf";
 		break;
-	case LOG::Warn:
+	case Warn:
 		TypeSz = L"wrn";
 		break;
-	case LOG::Error:
+	case Error:
 		TypeSz = L"err";
 		break;
 	}
@@ -33,10 +42,11 @@ Log(
 	SYSTEMTIME Time = { 0 };
 	GetLocalTime(&Time);
 
-	wprintf(L"[%02d:%02d:%02d] (%s) %s\n", Time.wHour, Time.wMinute, Time.wSecond, TypeSz, Text);
+	wprintf(L"[%02d:%02d:%02d] (%s) [%s] %s\n", Time.wHour, Time.wMinute, Time.wSecond, TypeSz, Scope, Text);
 
-	if (Type == LOG::Error)
+	if (Type == Error)
 		MessageBoxW(NULL, Text, L"Phosdb", MB_ICONERROR);
 
 	HeapFree(GetProcessHeap(), 0, Text);
 }
+};

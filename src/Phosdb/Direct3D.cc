@@ -2,26 +2,17 @@
 #include "Window.hh"
 
 namespace Phosdb {
-Direct3D::Direct3D(const Window &Wnd) {
+Direct3D::Direct3D(
+	const Window &Wnd
+) {
 	UINT32 Flags = 0;
 #if DEBUG
 	Flags |= D3D11_CREATE_DEVICE_DEBUG;
 #endif
 
-	DWM_TIMING_INFO TimingInfo = {
-		.cbSize = sizeof(DWM_TIMING_INFO)
-	};
-
-	if (FAILED(Result = DwmGetCompositionTimingInfo(NULL, &TimingInfo)))
-		return;
-
 	DXGI_MODE_DESC BufferDesc = {
 		.Width            = (UINT32)Wnd.Width(),
 		.Height           = (UINT32)Wnd.Height(),
-		.RefreshRate      = {
-			.Numerator   = TimingInfo.rateRefresh.uiNumerator,
-			.Denominator = TimingInfo.rateRefresh.uiDenominator
-		},
 		.Format           = DXGI_FORMAT_R8G8B8A8_UNORM,
 		.ScanlineOrdering = DXGI_MODE_SCANLINE_ORDER_UNSPECIFIED,
 		.Scaling          = DXGI_MODE_SCALING_UNSPECIFIED
