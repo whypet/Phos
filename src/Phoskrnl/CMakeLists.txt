@@ -15,7 +15,7 @@ set_target_properties(${PROJECT_NAME} PROPERTIES
 	OUTPUT_NAME "Phoskrnl"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/System")
 
-target_include_directories(${PROJECT_NAME} PRIVATE ${CMAKE_CURRENT_SOURCE_DIR})
+target_include_directories(${PROJECT_NAME} PRIVATE ".")
 target_compile_options(${PROJECT_NAME} PRIVATE "-mno-red-zone" "-fno-stack-protector" "-fno-short-wchar" "-ffreestanding" "-fmsc-version=0")
 target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-subsystem:native" "-Wl,-nodefaultlib" "-Wl,-entry:KiMain")
 

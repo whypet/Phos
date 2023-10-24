@@ -1,5 +1,6 @@
 #include "TcpClient.hh"
 #include "Logger.hh"
+#include "Util.hh"
 
 namespace Phosdb {
 WSADATA TcpClient::WsaData = { 0 };
@@ -13,13 +14,14 @@ VOID TcpClient::Destroy() {
 }
 
 TcpClient::TcpClient(
-	const std::wstring &IpAddress,
-	UINT16              Port
+	const std::string &Address,
+	UINT16             Port
 ) {
 	INT32 Result;
 
-	this->IpAddress = IpAddress;
-	this->Port      = Port;
+	this->Address = Address;
+	this->Port    = Port;
+	Connected     = FALSE;
 
 	ADDRINFOW *AddrInfo = NULL;
 	ADDRINFOW  Hints    = { 0 };
@@ -31,7 +33,7 @@ TcpClient::TcpClient(
 	LOG(Trace, "Getting Winsock address info.");
 
 	Result = GetAddrInfoW(
-		IpAddress.c_str(),
+		Util::Utf8ToWide(std::string(Address)).c_str(),
 		std::to_wstring(Port).c_str(),
 		&Hints,
 		&AddrInfo);
@@ -97,20 +99,21 @@ TcpClient::TcpClient(
 
 	FreeAddrInfoW(AddrInfo);
 
+	Connected = TRUE;
+
 	// Enable non-blocking mode
 	ULONG Mode = 1;
 	ioctlsocket(Socket, FIONBIO, &Mode);
 }
 
-BOOL TcpClient::Receive(
-	std::vector<UINT8> &Data,
-	UINTN              *BytesReceived
-) const {
+UINTN TcpClient::Receive(
+	std::vector<UINT8> &Data
+) {
 	UINT8 Buffer[4096];
-	UINTN Result;
+	INT   Result;
+	UINTN Bytes;
 
-	if (BytesReceived != NULL)
-		*BytesReceived = 0;
+	Bytes = 0;
 
 	do {
 		Result = recv(Socket, reinterpret_cast<char *>(Buffer), sizeof(Buffer), 0);
@@ -118,25 +121,87 @@ BOOL TcpClient::Receive(
 		INT32 ErrorCode = WSAGetLastError();
 
 		if (ErrorCode == WSAEWOULDBLOCK)
-			return TRUE;
+			return Bytes;
 
 		if (Result == SOCKET_ERROR) {
 			LOG(Error,
 				"Failed to receive data from socket.\nError code: %d",
 				ErrorCode);
 
-			return FALSE;
+			Connected = FALSE;
+
+			return SIZE_MAX;
 		}
 
-		if (Result > 0) {
+		if (Result > 0 && Result != SOCKET_ERROR) {
 			Data.insert(Data.begin(), Buffer, Buffer + Result);
-
-			if (BytesReceived != NULL)
-				*BytesReceived += Result;
+			Bytes += Result;
 		}
 	} while (Result > 0);
 
-	return TRUE;
+	Connected = TRUE;
+
+	return Bytes;
+}
+
+UINTN TcpClient::Send(
+	const std::vector<UINT8> &Data
+) {
+	return Send(&Data[0], Data.size());
+}
+
+UINTN TcpClient::Send(
+	const UINT8 *Data,
+	UINTN        Size
+) {
+	INT   Result;
+	UINTN Bytes;
+
+	Bytes = 0;
+
+	do {
+		FD_SET  WriteFd = { 0 };
+		TIMEVAL Timeout = { .tv_sec = 5 };
+
+		FD_SET(Socket, &WriteFd);
+
+		Result = select(0, NULL, &WriteFd, NULL, &Timeout);
+
+		if (Result == 0)
+			return SIZE_MAX;
+		else if (Result == SOCKET_ERROR) {
+			LOG(Error,
+				"Failed to get socket writeability status.\nError code: %d",
+				WSAGetLastError());
+
+			Connected = FALSE;
+
+			return SIZE_MAX;
+		}
+
+		Result = send(Socket, reinterpret_cast<const CHAR *>(Data + Bytes), Size - Bytes, 0);
+
+		INT32 ErrorCode = WSAGetLastError();
+
+		if (ErrorCode == WSAEWOULDBLOCK)
+			return Bytes;
+
+		if (Result == SOCKET_ERROR) {
+			LOG(Error,
+				"Failed to send data to socket.\nError code: %d",
+				ErrorCode);
+
+			Connected = FALSE;
+
+			return SIZE_MAX;
+		}
+
+		Bytes += Result;
+	} while (Bytes < Size);
+
+	Connected = TRUE;
+
+	return Bytes;
 }
 
 TcpClient::~TcpClient() {

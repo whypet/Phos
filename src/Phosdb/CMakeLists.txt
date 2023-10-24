@@ -2,16 +2,6 @@ project(Phosdb LANGUAGES CXX)
 
 option(WINDOWS_SUBSYSTEM "Compiles using the Windows subsystem.")
 
-if (FALSE)
-	function(copy_directory target directory)
-		add_custom_command(
-			TARGET ${target} POST_BUILD
-			COMMAND ${CMAKE_COMMAND} -E copy_directory
-				"$<TARGET_PROPERTY:${target},SOURCE_DIR>/${directory}"
-				"$<TARGET_PROPERTY:${target},BINARY_DIR>/${directory}")
-	endfunction()
-endif()
-
 add_subdirectory("../../thirdparty/DirectXMath" "DirectXMath")
 
 set(FT_DISABLE_ZLIB TRUE)
@@ -36,19 +26,25 @@ target_sources(ImGui PRIVATE
 	"../../thirdparty/imgui/backends/imgui_impl_dx11.h"
 	"../../thirdparty/imgui/backends/imgui_impl_win32.cpp"
 	"../../thirdparty/imgui/backends/imgui_impl_win32.h"
+	"../../thirdparty/imgui/misc/cpp/imgui_stdlib.cpp"
+	"../../thirdparty/imgui/misc/cpp/imgui_stdlib.h"
 	"../../thirdparty/imgui/misc/freetype/imgui_freetype.cpp"
 	"../../thirdparty/imgui/misc/freetype/imgui_freetype.h")
 
 target_include_directories(ImGui SYSTEM PUBLIC "../../thirdparty/freetype/include")
 target_include_directories(ImGui SYSTEM PUBLIC "../../thirdparty/imgui")
 target_include_directories(ImGui SYSTEM PUBLIC "../../thirdparty/imgui/backends")
-target_include_directories(ImGui SYSTEM PUBLIC "../../thirdparty/imgui/misc")
+target_include_directories(ImGui SYSTEM PUBLIC "../../thirdparty/imgui/misc/cpp")
+target_include_directories(ImGui SYSTEM PUBLIC "../../thirdparty/imgui/misc/freetype")
 
 target_compile_options(ImGui PUBLIC "-DIMGUI_USER_CONFIG=\"${CMAKE_CURRENT_SOURCE_DIR}/ImConfig.hh\"")
 
 add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
+	"GUI/SerialWindow.cc"
+	"GUI/SerialWindow.hh"
+	"Window.hh"
 	"Direct3D.cc"
 	"Direct3D.hh"
 	"ImConfig.hh"
@@ -65,7 +61,8 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 
-target_compile_options(${PROJECT_NAME} PRIVATE "-fshort-wchar")
+target_include_directories(${PROJECT_NAME} PRIVATE ".")
+target_compile_options(${PROJECT_NAME} PRIVATE "-Wall" "-fshort-wchar")
 target_link_libraries(${PROJECT_NAME} PRIVATE ImGui freetype "d3d11.lib" "ws2_32.lib" "ntdll.lib")
 
 if (WINDOWS_SUBSYSTEM)
@@ -80,4 +77,16 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	add_compile_definitions(DEBUG)
     target_compile_options(${PROJECT_NAME} PRIVATE "-g" "-ggdb" "-gdwarf-4")
     target_link_options(${PROJECT_NAME} PRIVATE "-g" "-ggdb" "-gdwarf-4")
+endif()
+
+cmake_path(SET    FONTS_PATH "$ENV{windir}")
+cmake_path(APPEND FONTS_PATH "Fonts")
+
+cmake_path(SET    TAHOMA_FONT ${FONTS_PATH})
+cmake_path(APPEND TAHOMA_FONT "tahoma.ttf")
+
+if(EXISTS ${TAHOMA_FONT})
+	configure_file(${TAHOMA_FONT} "Res/tahoma.ttf" COPYONLY)
+else()
+	message("Could not find Tahoma font. Add 'Res/tahoma.ttf' in the build directory manually.")
 endif()

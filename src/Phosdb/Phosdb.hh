@@ -22,7 +22,11 @@
 #include <imgui.h>
 #include <imgui_impl_win32.h>
 #include <imgui_impl_dx11.h>
-#include <freetype/imgui_freetype.h>
+#include <imgui_stdlib.h>
+#include <imgui_freetype.h>
+
+#define WIDE(x) L ## #x
+#define EMSP "\u2003"
 
 using INTN  = LONG_PTR;
 using UINTN = ULONG_PTR;

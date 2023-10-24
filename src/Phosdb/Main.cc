@@ -1,8 +1,12 @@
-#include "Phosdb.hh"
-#include "Logger.hh"
-#include "Direct3D.hh"
-#include "TcpClient.hh"
-#include "Window.hh"
+#include <Phosdb.hh>
+
+#include <Logger.hh>
+#include <Direct3D.hh>
+#include <TcpClient.hh>
+#include <Window.hh>
+
+#include <GUI/Window.hh>
+#include <GUI/SerialWindow.hh>
 
 class Main {
 public:
@@ -29,20 +33,19 @@ INT32 main() {
 INT32 Main::Entry() {
 	Phosdb::TcpClient::Initialize();
 
-	Phosdb::TcpClient Client(L"localhost", 8888);
+	Phosdb::TcpClient Client("localhost", 8888);
 
-	// works with QEMU! hooray
-#if 1
+#if 0
 	for (;;) {
 		std::vector<UINT8> Data;
 		UINTN BytesReceived = 0;
 		BOOL Result;
 
 		do {
-			Result = Client.Receive(Data, &BytesReceived);
-		} while (BytesReceived == 0 && Result);
+			Result = Client.Receive(Data);
+		} while (BytesReceived == 0 && Result != SIZE_MAX);
 
-		if (!Result)
+		if (Result == SIZE_MAX)
 			return 1;
 
 		Data.push_back(0);
@@ -77,14 +80,20 @@ INT32 Main::Entry() {
 	IMGUI_CHECKVERSION();
 	ImGui::CreateContext();
 
-	ImGuiIO& io = ImGui::GetIO();
-	io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
+	ImGuiIO& Io = ImGui::GetIO();
+	Io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
 
-	ImFontConfig cfg;
-	cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_MonoHinting;
-	cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_Monochrome;
-	cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_Bitmap;
-	io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/tahoma.ttf", 11.0f, &cfg);
+	ImVector<ImWchar> GlyphRanges;
+	ImFontGlyphRangesBuilder GlyphRangesBuilder;
+	GlyphRangesBuilder.AddRanges(Io.Fonts->GetGlyphRangesDefault());
+	GlyphRangesBuilder.AddText(EMSP);
+	GlyphRangesBuilder.BuildRanges(&GlyphRanges);
+
+	ImFontConfig Cfg;
+	Cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_MonoHinting;
+	Cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_Monochrome;
+	Cfg.FontBuilderFlags |= ImGuiFreeTypeBuilderFlags_Bitmap;
+	Io.Fonts->AddFontFromFileTTF("Res/tahoma.ttf", 11.0f, &Cfg, GlyphRanges.Data);
 
 	ImGui::StyleColorsDark();
 
@@ -123,6 +132,8 @@ INT32 Main::Entry() {
 
 	Wnd.Show();
 
+	Phosdb::GUI::SerialWindow Serial(Client);
+
 	INT32 Width;
 	INT32 Height;
 
@@ -153,7 +164,7 @@ INT32 Main::Entry() {
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		ImGui::ShowDemoWindow();
+		Serial.Render();
 
 		ImGui::Render();
 

@@ -8,7 +8,8 @@
                 "${workspaceFolder}/thirdparty/edk2/MdePkg/Include/X64",
 				"${workspaceFolder}/thirdparty/imgui",
 				"${workspaceFolder}/thirdparty/imgui/backends",
-				"${workspaceFolder}/thirdparty/imgui/misc",
+				"${workspaceFolder}/thirdparty/imgui/misc/cpp",
+				"${workspaceFolder}/thirdparty/imgui/misc/freetype",
 				"${workspaceFolder}/thirdparty/DirectXMath/Inc"
             ],
             "compilerPath": "C:/Program Files/LLVM/bin/clang.exe",

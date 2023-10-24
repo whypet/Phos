@@ -1,8 +1,8 @@
 #pragma once
 
-#include "Phosdb.hh"
+#include <Phosdb.hh>
 
-static std::string MakeLogScope(
+[[maybe_unused]] static std::string MakeLogScope(
 	const std::string &PrettyFunction
 ) {
 	UINTN Position;
@@ -13,8 +13,12 @@ static std::string MakeLogScope(
 		Where = Where.substr(0, Position);
 	
 	Position = Where.find_first_of("::");
-	if (Position != std::string::npos)
-		Where = Where.substr(Position + 2);
+	if (Position != std::string::npos) {
+		Position = Where.substr(0, Position).find_last_of(" ");
+		
+		if (Position != std::string::npos)
+			Where = Where.substr(Position + 1);
+	}
 	
 	return Where;
 }

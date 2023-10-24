@@ -40,6 +40,7 @@ However, since this is UEFI, there's still a lot that is done for us that we don
 
 - [x] Serial driver
 - [ ] GDT (make new one after UEFI boot stage)
+- [ ] Memory manager
 - [ ] APIC interrupt handling (exceptions, keyboard...)
 - [ ] Paging
 - [ ] Command-line interface

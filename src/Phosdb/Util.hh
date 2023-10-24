@@ -1,6 +1,6 @@
 #pragma once
 
-#include "Phosdb.hh"
+#include <Phosdb.hh>
 
 namespace Phosdb {
 class Util {
