@@ -9,5 +9,6 @@
     "C_Cpp.files.exclude": {
         "thirdparty/**": true,
 	},
-	"C_Cpp.autoAddFileAssociations": false
+	"C_Cpp.autoAddFileAssociations": false,
+	"C_Cpp.errorSquiggles": "disabled" // https://github.com/microsoft/vscode-cpptools/issues/11585
 }

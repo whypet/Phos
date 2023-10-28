@@ -14,6 +14,13 @@
             "isBackground": true,
             "command": "Start-Process 'qemu-system-x86_64' -ArgumentList '-s -S -no-reboot -no-shutdown -monitor stdio -bios \"OVMF-pure-efi.fd\" -drive \"format=raw,file=fat:rw:${config:OutputPath}\"'",
             "problemMatcher": []
+        },
+		{
+            "label": "Launch QEMU (serial debug)",
+            "type": "shell",
+            "isBackground": true,
+            "command": "Start-Process 'qemu-system-x86_64' -ArgumentList '-no-reboot -no-shutdown -monitor stdio -serial tcp::8888,server,nodelay -bios \"OVMF-pure-efi.fd\" -drive \"format=raw,file=fat:rw:${config:OutputPath}\"'",
+            "problemMatcher": []
         }
     ]
 }

@@ -1,52 +1,62 @@
 {
-    "configurations": [
-        {
-            "name": "(lldb) Launch Phos",
-            "type": "lldb",
-            "request": "custom",
-            "expressions": "native",
-            "targetCreateCommands": [ "target create --no-dependents --arch x86_64 ${workspaceFolder}/out/Phos/Efi/Boot/Bootx64.efi" ],
-            "processCreateCommands": [ "gdb-remote localhost:1234" ],
-            "preLaunchTask": "Launch QEMU (debug)"
-        },
+	"configurations": [
 		{
-            "name": "(lldb) Launch Phosdb",
-            "type": "lldb",
-            "request": "launch",
-			"program": "${workspaceFolder}/out/Phosdb/Phosdb.exe",
-			"cwd": "${workspaceFolder}/out/Phosdb"
-        },
+			"name": "(lldb) Launch Phos",
+			"type": "lldb",
+			"request": "custom",
+			"expressions": "native",
+			"targetCreateCommands": [ "target create --no-dependents --arch x86_64 ${workspaceFolder}/out/Phos/Efi/Boot/Bootx64.efi" ],
+			"processCreateCommands": [ "gdb-remote localhost:1234" ],
+			"preLaunchTask": "Launch QEMU (debug)"
+		},
 		{
-            "name": "(gdb) Launch Phosdb",
-            "type": "cppdbg",
-            "request": "launch",
+			"name": "(lldb) Launch Phosdb",
+			"type": "lldb",
+			"request": "launch",
 			"program": "${workspaceFolder}/out/Phosdb/Phosdb.exe",
-			"cwd": "${workspaceFolder}/out/Phosdb"
-        } /* ,
-        {
-            "name": "(gdb) Launch",
-            "type": "cppdbg",
-            "request": "launch",
-            "cwd": "${workspaceFolder}",
-            "program": "${workspaceFolder}/out/Phos/Efi/Boot/Bootx64.efi",
-            "externalConsole": true,
-            "targetArchitecture": "x64",
-            "MIMode": "gdb",
-            "miDebuggerPath": "gdb",
-            "customLaunchSetupCommands": [
-                {
-                    "text": "target remote localhost:1234",
-                    "description": "Connect to QEMU remote debugger"
-                }
-            ],
-            "setupCommands": [
-                {
-                    "description": "Enable pretty-printing for gdb",
-                    "text": "-enable-pretty-printing",
-                    "ignoreFailures": true
-                }
-            ],
-            "preLaunchTask": "Launch QEMU (debug)"
-        } */
-    ]
+			"cwd": "${workspaceFolder}/out/Phosdb",
+			"preLaunchTask": "Launch QEMU (serial debug)",
+			"expressions": "native"
+		},
+		{
+			"name": "(gdb) Launch Phosdb",
+			"type": "cppdbg",
+			"request": "launch",
+			"program": "${workspaceFolder}/out/Phosdb/Phosdb.exe",
+			"cwd": "${workspaceFolder}/out/Phosdb",
+			"preLaunchTask": "Launch QEMU (serial debug)",
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				}
+			],
+		} /* ,
+		{
+			"name": "(gdb) Launch",
+			"type": "cppdbg",
+			"request": "launch",
+			"cwd": "${workspaceFolder}",
+			"program": "${workspaceFolder}/out/Phos/Efi/Boot/Bootx64.efi",
+			"externalConsole": true,
+			"targetArchitecture": "x64",
+			"MIMode": "gdb",
+			"miDebuggerPath": "gdb",
+			"customLaunchSetupCommands": [
+				{
+					"text": "target remote localhost:1234",
+					"description": "Connect to QEMU remote debugger"
+				}
+			],
+			"setupCommands": [
+				{
+					"description": "Enable pretty-printing for gdb",
+					"text": "-enable-pretty-printing",
+					"ignoreFailures": true
+				}
+			],
+			"preLaunchTask": "Launch QEMU (debug)"
+		} */
+	]
 }

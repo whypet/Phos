@@ -4,6 +4,9 @@
             "name": "Phos",
             "includePath": [
                 "${workspaceFolder}/**",
+				"${workspaceFolder}/src/Phosdb",
+				"${workspaceFolder}/src/Phoskrnl",
+				"${workspaceFolder}/src/Shared",
                 "${workspaceFolder}/thirdparty/edk2/MdePkg/Include",
                 "${workspaceFolder}/thirdparty/edk2/MdePkg/Include/X64",
 				"${workspaceFolder}/thirdparty/imgui",
@@ -12,11 +15,18 @@
 				"${workspaceFolder}/thirdparty/imgui/misc/freetype",
 				"${workspaceFolder}/thirdparty/DirectXMath/Inc"
             ],
-            "compilerPath": "C:/Program Files/LLVM/bin/clang.exe",
+			"defines": [
+				"PHOSDB",
+				"PHOSKRNL",
+				"DEBUG",
+				"UNICODE",
+				"_UNICODE"
+			],
+            "compilerPath": "${CC}",
+			"compilerArgs": [ "-Xclang", "-gcodeview", "-Xclang", "--dependent-lib=msvcrtd", "-Wall", "-fshort-wchar" ],
             "cStandard": "c17",
 			"cppStandard": "c++20",
-            "intelliSenseMode": "clang-x64",
-            "configurationProvider": "ms-vscode.cpptools"
+            "intelliSenseMode": "clang-x64"
         }
     ],
     "version": 4
