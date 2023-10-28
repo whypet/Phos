@@ -2,12 +2,12 @@
 
 #include "Phosboot.h"
 
-INTN
+UINTN
 StrLen(
 	IN const CHAR16 *String
 );
 
-INTN
+UINTN
 StrLen8(
 	IN const CHAR8 *String
 );
@@ -17,7 +17,7 @@ WriteHexadecimal(
 	IN     UINT64  Integer,
 	IN OUT INTN   *Length,
 	IN OUT CHAR16 *String,
-	IN     INTN    Size
+	IN     UINTN   Size
 );
 
 BOOLEAN
@@ -25,7 +25,7 @@ WriteUnsignedDecimal(
 	IN     UINT64  Decimal,
 	IN OUT INTN   *Length,
 	IN OUT CHAR16 *String,
-	IN     INTN    Size
+	IN     UINTN   Size
 );
 
 BOOLEAN
@@ -33,7 +33,7 @@ WriteSignedDecimal(
 	IN     INT64   Decimal,
 	IN OUT INTN   *Length,
 	IN OUT CHAR16 *String,
-	IN     INTN    Size
+	IN     UINTN   Size
 );
 
 VOID

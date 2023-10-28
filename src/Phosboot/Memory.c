@@ -3,24 +3,24 @@
 
 VOID
 ZeroMemory(
-	IN OUT VOID *Buffer,
-	IN     INTN  Size
+	IN OUT VOID *Dst,
+	IN     UINTN Size
 ) {
-	for (INTN i = 0; i < Size; i++)
-		*((INT8*)Buffer + i) = 0;
+	for (UINTN i = 0; i < Size; i++)
+		*((INT8*)Dst + i) = 0;
 }
 
 VOID
 CopyMemory(
-	OUT VOID *Dst,
-	IN  VOID *Src,
-	IN  INTN  Size
+	IN OUT VOID *Dst,
+	IN     VOID *Src,
+	IN     UINTN Size
 ) {
-	for (INTN i = 0; i < Size; i++)
+	for (UINTN i = 0; i < Size; i++)
 		*((INT8*)Dst + i) = *((INT8*)Src + i);
 }
 
-VOID*
+VOID *
 AllocatePool(
 	IN UINTN Size
 ) {

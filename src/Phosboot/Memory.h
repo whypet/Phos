@@ -4,18 +4,18 @@
 
 VOID
 ZeroMemory(
-	IN OUT VOID *Buffer,
-	IN     INTN  Size
+	IN OUT VOID *Dst,
+	IN     UINTN Size
 );
 
 VOID
 CopyMemory(
 	IN OUT VOID *Dst,
 	IN     VOID *Src,
-	IN     INTN  Size
+	IN     UINTN Size
 );
 
-VOID*
+VOID *
 AllocatePool(
 	IN UINTN Size
 );

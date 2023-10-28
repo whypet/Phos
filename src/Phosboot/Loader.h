@@ -19,8 +19,8 @@
 typedef union {
 	UINT16 Value;
 	struct {
-		UINT16 Type   : 4;
 		UINT16 Offset : 12;
+		UINT16 Type   : 4;
 	};
 } IMAGE_BASE_RELOCATION_ENTRY;
 
@@ -125,23 +125,28 @@ typedef struct {
 typedef struct {
 	BOOLEAN(*ValidatePE64)(
 		IN const VOID *RawImage,
-		IN UINTN       Size);
+		IN UINTN       Size
+	);
 
 	VOID *(*AllocateImage)(
 		IN  const VOID *RawImage,
-		OUT UINTN      *AllocatedSize);
+		OUT UINTN      *AllocatedSize
+	);
 
 	BOOLEAN(*FreeImage)(
 		IN OUT VOID *Image,
-		IN     UINTN Size);
+		IN     UINTN Size
+	);
 
 	VOID(*MapSections)(
 		IN OUT VOID       *Image,
-		IN     const VOID *RawImage);
+		IN     const VOID *RawImage
+	);
 
 	BOOLEAN(*RelocateImage)(
 		IN OUT VOID                          *Image,
-		IN     const IMAGE_OPTIONAL_HEADER64 *OptionalHeader);
+		IN     const IMAGE_OPTIONAL_HEADER64 *OptionalHeader
+	);
 } LOADER;
 
-extern const LOADER Loader;
+extern const LOADER *Loader;

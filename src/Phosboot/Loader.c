@@ -45,6 +45,7 @@ AllocateImage(
 
 	if (!EFI_ERROR(Status)) {
 		*AllocatedSize = PageCount * 4096;
+
 		return (VOID *)Address;
 	}
 
@@ -56,6 +57,7 @@ AllocateImage(
 
 	if (!EFI_ERROR(Status)) {
 		*AllocatedSize = PageCount * 4096;
+
 		return (VOID *)Address;
 	}
 	
@@ -67,13 +69,13 @@ FreeImage(
 	IN VOID *Image,
 	IN UINTN Size
 ) {
-	return EFI_ERROR(BS->FreePages((EFI_PHYSICAL_ADDRESS)Image, Size / 4096));
+	return !EFI_ERROR(BS->FreePages((EFI_PHYSICAL_ADDRESS)Image, Size / 4096));
 }
 
 VOID
 MapSections(
-	OUT VOID       *Image,
-	IN  const VOID *RawImage
+	IN OUT VOID       *Image,
+	IN     const VOID *RawImage
 ) {
 	ASSERT(Image != NULL && RawImage != NULL);
 
@@ -85,18 +87,18 @@ MapSections(
 
 	for (; Sections-- > 0; Section++) {
 		CopyMemory(
-			(UINT8*)Image + Section->VirtualAddress,
-			(UINT8*)RawImage + Section->PointerToRawData,
+			(UINT8 *)Image + Section->VirtualAddress,
+			(UINT8 *)RawImage + Section->PointerToRawData,
 			Section->SizeOfRawData);
 	}
 }
 
 BOOLEAN
 RelocateImage(
-	OUT VOID                          *Image,
-	IN  const IMAGE_OPTIONAL_HEADER64 *OptionalHeader
+	IN OUT VOID                          *Image,
+	IN     const IMAGE_OPTIONAL_HEADER64 *OptionalHeader
 ) {
-	UINTN BaseDelta = (UINTN)Image - (UINTN)OptionalHeader->ImageBase;
+	UINT64 BaseDelta = (UINT64)Image - OptionalHeader->ImageBase;
 
 	if (BaseDelta == 0)
 		return FALSE;
@@ -114,10 +116,12 @@ RelocateImage(
 		IMAGE_BASE_RELOCATION_ENTRY *Entry = (IMAGE_BASE_RELOCATION_ENTRY *)(RelocationData + 1);
 
 		for (; Count-- > 0; Entry++) {
-			if (Entry->Type == IMAGE_REL_BASED_DIR64) {
-				UINTN *PatchPointer = (UINTN *)((UINTN)Image + RelocationData->VirtualAddress + Entry->Offset);
+			VOID *Patch = (VOID *)((UINTN)Image + RelocationData->VirtualAddress + Entry->Offset);
 
-				*PatchPointer += BaseDelta;
+			switch (Entry->Type) {
+			case IMAGE_REL_BASED_DIR64:
+				*(UINT64 *)Patch += BaseDelta;
+				break;
 			}
 		}
 
@@ -127,10 +131,12 @@ RelocateImage(
 	return TRUE;
 }
 
-const LOADER Loader = {
+const LOADER _Loader = {
 	.ValidatePE64  = ValidatePE64,
 	.AllocateImage = AllocateImage,
 	.FreeImage     = FreeImage,
 	.MapSections   = MapSections,
 	.RelocateImage = RelocateImage
 };
+
+const LOADER *Loader = &_Loader;

@@ -3,25 +3,25 @@
 
 #define ALIGNMENT (32 * sizeof(CHAR16))
 
-INTN
+UINTN
 StrLen(
 	IN const CHAR16 *String
 ) {
-	INTN Length = 0;
+	UINTN Length = 0;
 
 	for (; *String != 0; Length++, String++);
 
 	return Length;
 }
 
-INTN
+UINTN
 StrLen8(
 	IN const CHAR8 *String
 ) {
-	INTN Length = 0;
+	UINTN Length = 0;
 
 	for (; *String != 0; Length++, String++);
-	
+
 	return Length;
 }
 
@@ -30,7 +30,7 @@ WriteHexadecimal(
 	IN     UINT64  Integer,
 	IN OUT INTN   *Length,
 	IN OUT CHAR16 *String,
-	IN     INTN    Size
+	IN     UINTN   Size
 ) {
 	INTN _Length = 0;
 
@@ -43,7 +43,7 @@ WriteHexadecimal(
 
 	*Length = _Length;
 
-	if (Size < (_Length + 1) * sizeof(CHAR16))
+	if (Size < (UINTN)((_Length + 1) * sizeof(CHAR16)))
 		return FALSE;
 
 	for (INTN i = _Length - 1; i >= 0; i--, Integer /= 16) {
@@ -62,7 +62,7 @@ WriteUnsignedDecimal(
 	IN     UINT64  Integer,
 	IN OUT INTN   *Length,
 	IN OUT CHAR16 *String,
-	IN     INTN    Size
+	IN     UINTN   Size
 ) {
 	INTN _Length = 0;
 
@@ -89,7 +89,7 @@ WriteSignedDecimal(
 	IN     INT64   Integer,
 	IN OUT INTN   *Length,
 	IN OUT CHAR16 *String,
-	IN     INTN    Size
+	IN     UINTN   Size
 ) {
 	INTN Offset = Integer < 0 ? 1 : 0;
 	INTN _Length = Offset;
@@ -159,7 +159,7 @@ PrintVariadic(
 			}
 			case L's': {
 				CHAR16 *StringArg = VA_ARG(Args, CHAR16 *);
-				INTN    Length    = StrLen(StringArg);
+				UINTN   Length    = StrLen(StringArg);
 
 				while ((i + Length + 1) * sizeof(CHAR16) >= Size)
 					RESIZE(ALIGN(Size + Length * sizeof(CHAR16), ALIGNMENT));
@@ -171,7 +171,7 @@ PrintVariadic(
 			}
 			case L'S': {
 				CHAR8 *StringArg = VA_ARG(Args, CHAR8 *);
-				INTN   Length    = StrLen8(StringArg);
+				UINTN  Length    = StrLen8(StringArg);
 
 				while ((i + Length + 1) * sizeof(CHAR16) >= Size)
 					RESIZE(ALIGN(Size + Length * sizeof(CHAR16), ALIGNMENT));
