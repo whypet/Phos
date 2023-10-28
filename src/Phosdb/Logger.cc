@@ -4,13 +4,14 @@
 
 extern "C" VOID Log(
 	INT32       Type,
+	const CHAR *PrettyFunc,
 	const CHAR *Format,
 	...
 ) {
 	va_list Args;
 	va_start(Args, Format);
 
-	Phosdb::Logger::Log(Type, MakeLogScope(__PRETTY_FUNCTION__).c_str(), Format, Args);
+	Phosdb::Logger::Log(Type, MakeLogScope(PrettyFunc).c_str(), Format, Args);
 
 	va_end(Args);
 }
