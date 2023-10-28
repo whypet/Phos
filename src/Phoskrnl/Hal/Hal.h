@@ -1,6 +1,8 @@
 #pragma once
 
-#include <PhosBase.h>
+#include <Phosbase.h>
+
+#define _PHOSKRNL_HAL_H_
 
 #define COM1 0x3F8
 
@@ -48,6 +50,7 @@ typedef struct {
 	UINT64 _BaseC : 8;
 } HALGDT_SEGMENT_DESCRIPTOR;
 
+EXPORT
 VOID
 PHOSAPI
 HalCreateGdtr(
@@ -55,6 +58,7 @@ HalCreateGdtr(
 );
 
 __forceinline
+EXPORT
 VOID
 PHOSAPI
 HalLoadGdtr(
@@ -69,21 +73,33 @@ HalInitSerial(
 	IN UINT16 Port 
 );
 
+EXPORT
 UINT8
 PHOSAPI
 HalPollSerial(
 	IN UINT16 Port 
 );
 
+EXPORT
 UINT8
 PHOSAPI
 HalReadSerial(
 	IN UINT16 Port 
 );
 
+EXPORT
 VOID
 PHOSAPI
 HalWriteSerial(
 	IN UINT16 Port,
 	IN UINT8  Value
+);
+
+EXPORT
+VOID
+PHOSAPI
+HalWriteSerialEx(
+	IN UINT16       Port,
+	IN const UINT8 *Data,
+	IN UINTN        Size
 );

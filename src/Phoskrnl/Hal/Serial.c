@@ -59,3 +59,17 @@ HalWriteSerial(
 
 	__outbyte(Port, Value);
 }
+
+VOID
+PHOSAPI
+HalWriteSerialEx(
+	IN UINT16       Port,
+	IN const UINT8 *Data,
+	IN UINTN        Size
+) {
+	for (UINTN i = 0; i < Size; i++) {
+		while (!(HalPollSerial(Port) & 1 << 5));
+
+		__outbyte(Port, Data[i]);
+	}
+}

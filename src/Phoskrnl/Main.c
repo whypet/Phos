@@ -7,13 +7,10 @@ KiMain(
 ) {
 	HalInitSerial(COM1);
 
-	HalWriteSerial(COM1, 'a');
-	HalWriteSerial(COM1, 'b');
-	HalWriteSerial(COM1, 'c');
+	KdPrint("Hello world from Phoskrnl\n");
 
-	for (;;) {
+	for (;;)
 		__asm__ __volatile__("pause");
-	}
 
 	return;
 }

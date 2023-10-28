@@ -4,19 +4,31 @@ set(CMAKE_C_STANDARD_LIBRARIES "")
 add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
-	"Hal/Hal.h" "Hal/Gdt.c" "Hal/Serial.c"
-	"Intrinsics.h"
+	"../Shared/Debug/Protocol.c"
+	"../Shared/Debug/Protocol.h"
+	"../Shared/Intrinsics.h"
+	"../Shared/Phosdef.h"
+	"Hal/Gdt.c" 
+	"Hal/Hal.h"
+	"Kd/Kd.c"
+	"Kd/Kd.h"
+	"Hal/Serial.c"
+	"Rtl/Memory.c"
+	"Rtl/Rtl.h"
+	"Rtl/String.c"
     "Main.c"
     "Phos.h"
-	"PhosBase.h")
+	"Phosbase.h")
 
 set_target_properties(${PROJECT_NAME} PROPERTIES
     SUFFIX ""
 	OUTPUT_NAME "Phoskrnl"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/System")
 
-target_include_directories(${PROJECT_NAME} PRIVATE ".")
-target_compile_options(${PROJECT_NAME} PRIVATE "-mno-red-zone" "-fno-stack-protector" "-fno-short-wchar" "-ffreestanding" "-fmsc-version=0")
+add_compile_definitions(PHOSKRNL)
+
+target_include_directories(${PROJECT_NAME} PRIVATE "../Shared" ".")
+target_compile_options(${PROJECT_NAME} PRIVATE "-mno-red-zone" "-fno-stack-protector" "-fno-short-wchar" "-ffreestanding" "-fmsc-version=0" "-mno-stack-arg-probe")
 target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-subsystem:native" "-Wl,-nodefaultlib" "-Wl,-entry:KiMain")
 
 if(CMAKE_SIZEOF_VOID_P EQUAL 8)
