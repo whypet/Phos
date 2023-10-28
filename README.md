@@ -39,6 +39,7 @@ However, since this is UEFI, there's still a lot that is done for us that we don
 ### Phoskrnl &mdash; the operating system kernel
 
 - [x] Serial driver
+- [x] Debug protocol
 - [ ] GDT (make new one after UEFI boot stage)
 - [ ] Memory manager
 - [ ] APIC interrupt handling (exceptions, keyboard...)
