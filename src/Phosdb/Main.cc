@@ -2,8 +2,9 @@
 
 #include <Logger.hh>
 #include <Direct3D.hh>
-#include <TcpClient.hh>
 #include <Window.hh>
+
+#include <Clients/SerialClient.hh>
 
 #include <GUI/Window.hh>
 #include <GUI/SerialWindow.hh>
@@ -31,9 +32,11 @@ INT32 main() {
 #endif
 
 INT32 Main::Entry() {
-	Phosdb::TcpClient::Initialize();
+	Phosdb::Clients::TcpClient::Initialize();
 
-	Phosdb::TcpClient Client("localhost", 8888);
+	Phosdb::Clients::TcpClient Tcp("localhost", 8888);
+
+	Phosdb::Clients::SerialClient<Phosdb::Clients::TcpClient> Serial(Tcp);
 
 #if 0
 	for (;;) {
@@ -132,7 +135,7 @@ INT32 Main::Entry() {
 
 	Wnd.Show();
 
-	Phosdb::GUI::SerialWindow Serial(Client);
+	Phosdb::GUI::SerialWindow SerialGui(Serial);
 
 	INT32 Width;
 	INT32 Height;
@@ -164,7 +167,8 @@ INT32 Main::Entry() {
 		ImGui_ImplWin32_NewFrame();
 		ImGui::NewFrame();
 
-		Serial.Render();
+		SerialGui.Update();
+		SerialGui.Render();
 
 		ImGui::Render();
 
@@ -189,7 +193,7 @@ INT32 Main::Entry() {
 
 	Phosdb::Window::Destroy();
 
-	Phosdb::TcpClient::Destroy();
+	Phosdb::Clients::TcpClient::Destroy();
 
 	return 0;
 }

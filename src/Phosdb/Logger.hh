@@ -2,6 +2,9 @@
 
 #include <Phosdb.hh>
 
+#define LOG(Type, Format, ...) \
+	Phosdb::Logger::Log(Phosdb::Logger::Type, MakeLogScope(__PRETTY_FUNCTION__).c_str(), Format, ##__VA_ARGS__)
+
 [[maybe_unused]] static std::string MakeLogScope(
 	const std::string &PrettyFunction
 ) {
@@ -23,8 +26,6 @@
 	return Where;
 }
 
-#define LOG(Type, Format, ...) Phosdb::Logger::Log(Phosdb::Logger::Type, MakeLogScope(__PRETTY_FUNCTION__).c_str(), Format, __VA_ARGS__)
-
 namespace Phosdb {
 class Logger {
 public:
@@ -40,6 +41,13 @@ public:
 		const CHAR *Scope,
 		const CHAR *Format,
 		...
+	);
+
+	static VOID Log(
+		INT32       Type,
+		const CHAR *Scope,
+		const CHAR *Format,
+		va_list     Args
 	);
 };
 }

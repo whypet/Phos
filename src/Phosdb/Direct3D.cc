@@ -1,5 +1,6 @@
 #include "Direct3D.hh"
-#include "Window.hh"
+
+#include <Window.hh>
 
 namespace Phosdb {
 Direct3D::Direct3D(

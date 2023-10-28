@@ -1,4 +1,4 @@
-project(Phosdb LANGUAGES CXX)
+project(Phosdb LANGUAGES C CXX)
 
 option(WINDOWS_SUBSYSTEM "Compiles using the Windows subsystem.")
 
@@ -42,18 +42,23 @@ target_compile_options(ImGui PUBLIC "-DIMGUI_USER_CONFIG=\"${CMAKE_CURRENT_SOURC
 add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
+	"../Shared/Debug/Protocol.c"
+	"../Shared/Debug/Protocol.h"
+	"Clients/SerialClient.cc"
+	"Clients/SerialClient.hh"
+	"Clients/TcpClient.cc"
+	"Clients/TcpClient.hh"
 	"GUI/SerialWindow.cc"
 	"GUI/SerialWindow.hh"
-	"Window.hh"
+	"GUI/Window.hh"
 	"Direct3D.cc"
 	"Direct3D.hh"
 	"ImConfig.hh"
 	"Logger.cc"
+	"Logger.h"
 	"Logger.hh"
 	"Main.cc"
 	"Phosdb.hh"
-	"TcpClient.cc"
-	"TcpClient.hh"
 	"Util.cc"
 	"Util.hh"
 	"Window.cc"
@@ -61,7 +66,11 @@ target_sources(${PROJECT_NAME} PRIVATE
 
 set_property(TARGET ${PROJECT_NAME} PROPERTY CXX_STANDARD 20)
 
-target_include_directories(${PROJECT_NAME} PRIVATE ".")
+add_compile_definitions(PHOSDB)
+add_compile_definitions(UNICODE)
+add_compile_definitions(_UNICODE)
+
+target_include_directories(${PROJECT_NAME} PRIVATE "../Shared" ".")
 target_compile_options(${PROJECT_NAME} PRIVATE "-Wall" "-fshort-wchar")
 target_link_libraries(${PROJECT_NAME} PRIVATE ImGui freetype "d3d11.lib" "ws2_32.lib" "ntdll.lib")
 
@@ -69,9 +78,6 @@ if (WINDOWS_SUBSYSTEM)
 	add_compile_definitions(WINMAIN)
 	target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-subsystem:windows")
 endif()
-
-add_compile_definitions(UNICODE)
-add_compile_definitions(_UNICODE)
 
 if(CMAKE_BUILD_TYPE STREQUAL "Debug")
 	add_compile_definitions(DEBUG)

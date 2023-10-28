@@ -1,8 +1,9 @@
 #include "TcpClient.hh"
-#include "Logger.hh"
-#include "Util.hh"
 
-namespace Phosdb {
+#include <Logger.hh>
+#include <Util.hh>
+
+namespace Phosdb::Clients {
 WSADATA TcpClient::WsaData = { 0 };
 
 BOOL TcpClient::Initialize() {
@@ -121,7 +122,7 @@ UINTN TcpClient::Receive(
 		INT32 ErrorCode = WSAGetLastError();
 
 		if (ErrorCode == WSAEWOULDBLOCK)
-			return Bytes;
+			break;
 
 		if (Result == SOCKET_ERROR) {
 			LOG(Error,
@@ -130,7 +131,7 @@ UINTN TcpClient::Receive(
 
 			Connected = FALSE;
 
-			return SIZE_MAX;
+			return PHOS_ERROR;
 		}
 
 		if (Result > 0 && Result != SOCKET_ERROR) {
@@ -151,8 +152,8 @@ UINTN TcpClient::Send(
 }
 
 UINTN TcpClient::Send(
-	const UINT8 *Data,
-	UINTN        Size
+	const VOID *Data,
+	UINTN       Size
 ) {
 	INT   Result;
 	UINTN Bytes;
@@ -168,7 +169,7 @@ UINTN TcpClient::Send(
 		Result = select(0, NULL, &WriteFd, NULL, &Timeout);
 
 		if (Result == 0)
-			return SIZE_MAX;
+			return PHOS_ERROR;
 		else if (Result == SOCKET_ERROR) {
 			LOG(Error,
 				"Failed to get socket writeability status.\nError code: %d",
@@ -176,15 +177,15 @@ UINTN TcpClient::Send(
 
 			Connected = FALSE;
 
-			return SIZE_MAX;
+			return PHOS_ERROR;
 		}
 
-		Result = send(Socket, reinterpret_cast<const CHAR *>(Data + Bytes), Size - Bytes, 0);
+		Result = send(Socket, reinterpret_cast<const CHAR *>(Data) + Bytes, Size - Bytes, 0);
 
 		INT32 ErrorCode = WSAGetLastError();
 
 		if (ErrorCode == WSAEWOULDBLOCK)
-			return Bytes;
+			continue;
 
 		if (Result == SOCKET_ERROR) {
 			LOG(Error,
@@ -193,7 +194,7 @@ UINTN TcpClient::Send(
 
 			Connected = FALSE;
 
-			return SIZE_MAX;
+			return PHOS_ERROR;
 		}
 
 		Bytes += Result;

@@ -2,7 +2,7 @@
 
 #include <Phosdb.hh>
 
-namespace Phosdb {
+namespace Phosdb::Clients {
 class TcpClient {
 private:
 	static WSADATA WsaData;
@@ -29,8 +29,8 @@ public:
 	);
 
 	UINTN Send(
-		const UINT8 *Data,
-		UINTN        Size
+		const VOID *Data,
+		UINTN       Size
 	);
 
 	inline BOOL IsValid() const {

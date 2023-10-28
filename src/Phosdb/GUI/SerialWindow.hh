@@ -2,19 +2,24 @@
 
 #include "Window.hh"
 
-#include <TcpClient.hh>
+#include <Clients/SerialClient.hh>
 
 namespace Phosdb::GUI {
-class SerialWindow : public Window {
+template<typename T> class SerialWindow : public Window {
 private:
-	const Phosdb::TcpClient *Client;
+	Phosdb::Clients::SerialClient<T> Serial;
+
+	BOOL CanUpdate = TRUE;
 	std::string Message;
-	std::string Output;
+	std::string Log;
+
+	VOID RenderClientInfo();
 public:
 	SerialWindow(
-		const Phosdb::TcpClient &Client
+		Phosdb::Clients::SerialClient<T> &Serial
 	);
 
+	VOID Update();
 	VOID Render();
 };
 }

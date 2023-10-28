@@ -1,5 +1,19 @@
 #include "Logger.hh"
-#include "Util.hh"
+
+#include <Util.hh>
+
+extern "C" VOID Log(
+	INT32       Type,
+	const CHAR *Format,
+	...
+) {
+	va_list Args;
+	va_start(Args, Format);
+
+	Phosdb::Logger::Log(Type, MakeLogScope(__PRETTY_FUNCTION__).c_str(), Format, Args);
+
+	va_end(Args);
+}
 
 namespace Phosdb {
 VOID Logger::Log(
@@ -8,20 +22,28 @@ VOID Logger::Log(
 	const CHAR *Format,
 	...
 ) {
-#if !DEBUG
-	if (Type == Trace)
-		return;
-#endif
-
 	va_list Args;
 	va_start(Args, Format);
 
+	Log(Type, Scope, Format, Args);
+
+	va_end(Args);
+}
+
+VOID Logger::Log(
+	INT32       Type,
+	const CHAR *Scope,
+	const CHAR *Format,
+	va_list     Args
+) {
+#ifndef DEBUG
+	if (Type == Trace)
+		return;
+#endif
 	INT32 Length = _vscprintf(Format, Args);
 	CHAR *Text = new CHAR[Length + 1];
 
 	vsnprintf(Text, Length + 1, Format, Args);
-
-	va_end(Args);
 
 	const CHAR *TypeString;
 
