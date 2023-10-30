@@ -11,8 +11,8 @@ enum {
 };
 
 EXTERN_C VOID Log(
-	INT32       Type,
-	const CHAR *PrettyFunc,
-	const CHAR *Format,
+	INT32        Type,
+	const CHAR8 *PrettyFunc,
+	const CHAR8 *Format,
 	...
 );

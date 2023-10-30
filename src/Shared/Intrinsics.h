@@ -4,7 +4,7 @@
 
 #if !defined(_MSC_VER) || defined(__clang__)
 
-__forceinline
+FORCEINLINE
 UINT8
 __inbyte(
 	IN UINT16 Port
@@ -20,7 +20,7 @@ __inbyte(
 	return Value;
 }
 
-__forceinline
+FORCEINLINE
 VOID
 __outbyte(
 	IN UINT16 Port,
@@ -38,8 +38,8 @@ __outbyte(
 
 #ifndef _PHOSKRNL_RTL_H_
 
-inline
-EXPORT
+INLINE
+PHOSKRNLAPI
 VOID
 PHOSAPI
 RtlSetMemory(
@@ -48,20 +48,20 @@ RtlSetMemory(
 	IN     UINTN Size
 );
 
-inline
-EXPORT
+INLINE
+PHOSKRNLAPI
 VOID
 PHOSAPI
 RtlCopyMemory(
 	IN OUT VOID       *Dst,
-	IN     const VOID *Src,
+	IN     CONST VOID *Src,
 	IN     UINTN       Size
 );
 
 #endif
 
-__forceinline
-EXPORT
+FORCEINLINE
+PHOSKRNLAPI
 VOID *
 memset(
 	IN OUT VOID *Dst,
@@ -73,12 +73,12 @@ memset(
 	return Dst;
 }
 
-__forceinline
-EXPORT
+FORCEINLINE
+PHOSKRNLAPI
 VOID *
 memcpy(
 	IN OUT VOID       *Dst,
-	IN     const VOID *Src,
+	IN     CONST VOID *Src,
 	IN     UINTN       Size
 ) {
 	RtlCopyMemory(Dst, Src, Size);

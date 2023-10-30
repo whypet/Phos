@@ -41,7 +41,7 @@ GetVolume(
 EFI_STATUS
 OpenFile(
 	IN  EFI_LOADED_IMAGE *LoadedImage,
-	IN  const CHAR16     *Filename,
+	IN  CONST CHAR16     *Filename,
 	OUT EFI_FILE_HANDLE  *FileHandle
 ) {
 	EFI_STATUS Status;
@@ -193,6 +193,11 @@ EfiMain(
 		goto Cleanup;
 	}
 
+	if (GOP->Mode->Info->PixelFormat != PixelBlueGreenRedReserved8BitPerColor) {
+		PRINT_ERROR(L"[!] Phos only supports the BGR8 pixel format, while the GOP mode uses a different pixel format.\r\n");
+		goto Cleanup;
+	}
+
 	EFI_FILE_HANDLE FileHandle = NULL;
 
 	if (EFI_ERROR(Status = OpenFile(LoadedImage, KERNEL_PATH, &FileHandle))) {
@@ -225,22 +230,22 @@ EfiMain(
 
 		Print(L"Read %d bytes.\r\n", BufferSize);
 		
-		if (!Loader->ValidatePE64((const VOID *)RawImage, BufferSize)) {
+		if (!Loader->ValidatePE64((CONST VOID *)RawImage, BufferSize)) {
 			PRINT_ERROR(L"[!] Failed to load the kernel; invalid PE+ image.\r\n");
 			goto Cleanup;
 		}
 
-		const IMAGE_DOS_HEADER   *DosHeader = (const IMAGE_DOS_HEADER *)RawImage;
-		const IMAGE_NT_HEADERS64 *NtHeaders = (const IMAGE_NT_HEADERS64 *)((UINTN)RawImage + DosHeader->e_lfanew);
+		CONST IMAGE_DOS_HEADER   *DosHeader = (CONST IMAGE_DOS_HEADER *)RawImage;
+		CONST IMAGE_NT_HEADERS64 *NtHeaders = (CONST IMAGE_NT_HEADERS64 *)((UINTN)RawImage + DosHeader->e_lfanew);
 
 		Print(L"Loading kernel image...\r\n");
 
-		Image = Loader->AllocateImage((const VOID *)RawImage, &AllocatedSize);
+		Image = Loader->AllocateImage((CONST VOID *)RawImage, &AllocatedSize);
 		KiMain = (FnKiMain)((UINTN)Image + NtHeaders->OptionalHeader.AddressOfEntryPoint);
 
 		ASSERT(Image != NULL);
 
-		Loader->MapSections(Image, (const VOID *)RawImage);
+		Loader->MapSections(Image, (CONST VOID *)RawImage);
 		Loader->RelocateImage(Image, &NtHeaders->OptionalHeader);
 
 		FreePool(RawImage);
@@ -262,14 +267,14 @@ EfiMain(
 		}
 	}
 	
-	VIDEO_INFO Video = {
-		.Framebuffer = (VOID *)GOP->Mode->FrameBufferBase,
-		.Size        = GOP->Mode->FrameBufferSize,
-		.Width       = GOP->Mode->Info->HorizontalResolution,
-		.Height      = GOP->Mode->Info->VerticalResolution
+	KINIT_VID_INFO Video = {
+		.Framebuffer  = (VOID *)GOP->Mode->FrameBufferBase,
+		.BitsPerPixel = 32,
+		.Width        = GOP->Mode->Info->HorizontalResolution,
+		.Height       = GOP->Mode->Info->VerticalResolution
 	};
 
-	KiMain(Video);
+	KiMain(&Video);
 
 	return EFI_SUCCESS; // this shouldn't be reached
 

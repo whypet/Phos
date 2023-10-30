@@ -1,34 +1,29 @@
 #include "Protocol.h"
 
-#ifdef PHOSDB
-
-#include <Logger.h>
-
-#include <string.h>
-#include <stdio.h>
-
-#else
-
-#define LOG(...)
-
-#ifdef PHOSKRNL
-
+// Runtime functions
+#if PHOSKRNL
 #include <Rtl/Rtl.h>
 #include <Intrinsics.h>
-
+#else
+#include <string.h>
 #endif
 
+// Logging
+#if PHOSDB
+#include <Logger.h>
+#else
+#define LOG(...)
 #endif
 
 UINTN
 SHAREDAPI
 SerializeMessage(
-	IN     const DEBUG_PACKET_MESSAGE *Packet,
+	IN     CONST DEBUG_PACKET_MESSAGE *Packet,
 	IN OUT VOID                       *Data,
 	IN     UINTN                       DataSize
 ) {
-	const UINTN   MessageSizeField = OFFSET_OF(DEBUG_PACKET_MESSAGE, MessageSize);
-	const UINTN   MessageField     = OFFSET_OF(DEBUG_PACKET_MESSAGE, Message);
+	CONST UINTN   MessageSizeField = OFFSET_OF(DEBUG_PACKET_MESSAGE, MessageSize);
+	CONST UINTN   MessageField     = OFFSET_OF(DEBUG_PACKET_MESSAGE, Message);
 	DEBUG_PACKET *PacketData       = (DEBUG_PACKET *)Data;
 	UINT8        *_Data            = (UINT8 *)Data;
 
@@ -60,20 +55,20 @@ SerializeMessage(
 UINTN
 SHAREDAPI
 DeserializeMessage(
-	IN     const VOID           *Data,
+	IN     CONST VOID           *Data,
 	IN     UINTN                 DataSize,
 	IN OUT DEBUG_PACKET_MESSAGE *Packet
 ) {
-	const UINTN  MessageSizeField = OFFSET_OF(DEBUG_PACKET_MESSAGE, MessageSize);
-	const UINTN  MessageField     = OFFSET_OF(DEBUG_PACKET_MESSAGE, Message);
-	const UINT8 *_Data            = (const UINT8 *)Data;
+	CONST UINTN  MessageSizeField = OFFSET_OF(DEBUG_PACKET_MESSAGE, MessageSize);
+	CONST UINTN  MessageField     = OFFSET_OF(DEBUG_PACKET_MESSAGE, Message);
+	CONST UINT8 *_Data            = (CONST UINT8 *)Data;
 	
 	if (DataSize < sizeof(DEBUG_PACKET) || DataSize < MessageField) {
 		LOG(Warn, "Malformed packet data: Too small (%d bytes).", DataSize);
 		return PHOS_ERROR;
 	}
 
-	UINT8 Id = ((const DEBUG_PACKET *)Data)->Identifier;
+	UINT8 Id = ((CONST DEBUG_PACKET *)Data)->Identifier;
 
 	if (Id != DEBUG_PACKET_MESSAGE_ID) {
 		LOG(Warn, "Malformed packet data: Expected packet identifier %d but got %d.", DEBUG_PACKET_MESSAGE_ID, Id);
@@ -100,11 +95,11 @@ DeserializeMessage(
 	}
 }
 
-const CHAR8 DebugSignature[DEBUG_SIGNATURE_SIZE] = DEBUG_SIGNATURE;
+CONST CHAR8 DebugSignature[DEBUG_SIGNATURE_SIZE] = DEBUG_SIGNATURE;
 
-const DEBUG_PROTOCOL _DebugProtocol = {
+CONST DEBUG_PROTOCOL _DebugProtocol = {
 	.SerializeMessage   = SerializeMessage,
 	.DeserializeMessage = DeserializeMessage
 };
 
-const DEBUG_PROTOCOL *DebugProtocol = &_DebugProtocol;
+CONST DEBUG_PROTOCOL *DebugProtocol = &_DebugProtocol;

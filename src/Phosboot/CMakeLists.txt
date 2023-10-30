@@ -4,6 +4,8 @@ set(CMAKE_C_STANDARD_LIBRARIES "")
 add_executable(${PROJECT_NAME})
 
 target_sources(${PROJECT_NAME} PRIVATE
+	"../Shared/Phosdef.h"
+	"../Shared/Phoskinit.h"
     "Debug.c"
     "Debug.h"
     "Guids.c"
@@ -19,8 +21,8 @@ target_sources(${PROJECT_NAME} PRIVATE
 set_target_properties(${PROJECT_NAME} PROPERTIES
     SUFFIX ".efi"
     RUNTIME_OUTPUT_DIRECTORY "${CMAKE_RUNTIME_OUTPUT_DIRECTORY}/Efi/Boot")
-
-target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE "../../thirdparty/edk2/MdePkg/Include" "../../thirdparty/edk2/MdePkg/Include/X64")
+	
+target_include_directories(${PROJECT_NAME} SYSTEM PRIVATE "../Shared" "../../thirdparty/edk2/MdePkg/Include" "../../thirdparty/edk2/MdePkg/Include/X64")
 target_compile_options(${PROJECT_NAME} PRIVATE "-mno-red-zone" "-fno-stack-protector" "-fshort-wchar" "-ffreestanding")
 target_link_options(${PROJECT_NAME} PRIVATE "-Wl,-subsystem:efi_application" "-Wl,-nodefaultlib" "-Wl,-entry:EfiMain")
 

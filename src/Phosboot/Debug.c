@@ -3,8 +3,8 @@
 
 VOID
 AssertFail(
-	IN const CHAR8 *Cond,
-	IN const CHAR8 *File,
+	IN CONST CHAR8 *Cond,
+	IN CONST CHAR8 *File,
 	IN INT32        Line
 ) {
 	Print(L"Assertion '%S' failed: %S@%d", Cond, File, Line);

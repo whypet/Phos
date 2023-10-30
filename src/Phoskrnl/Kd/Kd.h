@@ -4,9 +4,9 @@
 
 #define _PHOSKRNL_KD_H_
 
-EXPORT
-BOOL
+PHOSKRNLAPI
+BOOLEAN
 PHOSAPI
 KdPrint(
-	IN const CHAR8 *Message
+	IN CONST CHAR8 *Message
 );

@@ -38,26 +38,26 @@ typedef struct {
 
 typedef struct {
 	_DEBUG_PACKET;
-	UINT64 MessageSize;
-	const CHAR8 *Message;
+	UINT64       MessageSize;
+	CONST CHAR8 *Message;
 } DEBUG_PACKET_MESSAGE;
 
 #pragma pack(pop)
 
 typedef struct {
 	UINTN(SHAREDAPI * SerializeMessage)(
-		IN     const DEBUG_PACKET_MESSAGE *Packet,
+		IN     CONST DEBUG_PACKET_MESSAGE *Packet,
 		IN OUT VOID                       *Data,
 		IN     UINTN                       DataSize
 	);
 
 	UINTN(SHAREDAPI * DeserializeMessage)(
-		IN     const VOID           *Data,
+		IN     CONST VOID           *Data,
 		IN     UINTN                 DataSize,
 		IN OUT DEBUG_PACKET_MESSAGE *Packet
 	);
 } DEBUG_PROTOCOL;
 
-EXTERN_C const CHAR8 DebugSignature[DEBUG_SIGNATURE_SIZE];
+EXTERN_C CONST CHAR8 DebugSignature[DEBUG_SIGNATURE_SIZE];
 
-EXTERN_C const DEBUG_PROTOCOL *DebugProtocol;
+EXTERN_C CONST DEBUG_PROTOCOL *DebugProtocol;

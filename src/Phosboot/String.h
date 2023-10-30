@@ -4,12 +4,12 @@
 
 UINTN
 StrLen(
-	IN const CHAR16 *String
+	IN CONST CHAR16 *String
 );
 
 UINTN
 StrLen8(
-	IN const CHAR8 *String
+	IN CONST CHAR8 *String
 );
 
 BOOLEAN
@@ -38,12 +38,12 @@ WriteSignedDecimal(
 
 VOID
 PrintVariadic(
-	IN const CHAR16 *Format,
+	IN CONST CHAR16 *Format,
 	IN VA_LIST       Args
 );
 
 VOID
 Print(
-	IN const CHAR16 *Format,
+	IN CONST CHAR16 *Format,
 	...
 );

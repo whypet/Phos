@@ -14,7 +14,7 @@ public:
 	static INT32 Entry();
 };
 
-#ifdef WINMAIN
+#if WINMAIN
 INT32
 WINAPI
 wWinMain(
@@ -37,24 +37,6 @@ INT32 Main::Entry() {
 	Phosdb::Clients::TcpClient Tcp("localhost", 8888);
 
 	Phosdb::Clients::SerialClient<Phosdb::Clients::TcpClient> Serial(Tcp);
-
-#if 0
-	for (;;) {
-		std::vector<UINT8> Data;
-		UINTN BytesReceived = 0;
-		BOOL Result;
-
-		do {
-			Result = Client.Receive(Data);
-		} while (BytesReceived == 0 && Result != SIZE_MAX);
-
-		if (Result == SIZE_MAX)
-			return 1;
-
-		Data.push_back(0);
-		printf("> %s\n", reinterpret_cast<const CHAR *>(&Data[0]));
-	}
-#endif
 
 	LOG(Info, "Creating window...");
 

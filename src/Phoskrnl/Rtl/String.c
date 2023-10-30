@@ -1,9 +1,9 @@
 #include "Rtl.h"
 
-inline
+INLINE
 UINTN
 RtlStringSizeA(
-	IN const CHAR8 *Data
+	IN CONST CHAR8 *Data
 ) {
 	UINTN Size;
 

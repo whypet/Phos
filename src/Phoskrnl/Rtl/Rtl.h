@@ -7,8 +7,10 @@
 #define strlen        RtlStringSizeA
 #define RtlStringLenA RtlStringSizeA
 
-inline
-EXPORT
+#pragma region Memory
+
+INLINE
+PHOSKRNLAPI
 VOID
 PHOSAPI
 RtlZeroMemory(
@@ -16,8 +18,8 @@ RtlZeroMemory(
 	IN     UINTN Size
 );
 
-inline
-EXPORT
+INLINE
+PHOSKRNLAPI
 VOID
 PHOSAPI
 RtlSetMemory(
@@ -26,20 +28,26 @@ RtlSetMemory(
 	IN     UINTN Size
 );
 
-inline
-EXPORT
+INLINE
+PHOSKRNLAPI
 VOID
 PHOSAPI
 RtlCopyMemory(
 	IN OUT VOID       *Dst,
-	IN     const VOID *Src,
+	IN     CONST VOID *Src,
 	IN     UINTN       Size
 );
 
-inline
-EXPORT
+#pragma endregion
+
+#pragma region Strings
+
+INLINE
+PHOSKRNLAPI
 UINTN
 PHOSAPI
 RtlStringSizeA(
-	IN const CHAR8 *Data
+	IN CONST CHAR8 *Data
 );
+
+#pragma endregion

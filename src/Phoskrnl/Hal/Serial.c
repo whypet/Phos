@@ -4,12 +4,12 @@
 // UART code will be changed later to use interrupts
 //
 
-BOOL
+BOOLEAN
 PHOSAPI
 HalInitSerial(
 	IN UINT16 Port 
 ) {
-	const UINT8 TestByte = 0x88;
+	CONST UINT8 TestByte = 0x88;
 	 
 	__outbyte(Port + UART_IER, 0);          // Disable interrupts (for now)
 	__outbyte(Port + UART_LCR, 1 << 7);     // Enable DLAB
@@ -64,7 +64,7 @@ VOID
 PHOSAPI
 HalWriteSerialEx(
 	IN UINT16       Port,
-	IN const UINT8 *Data,
+	IN CONST UINT8 *Data,
 	IN UINTN        Size
 ) {
 	for (UINTN i = 0; i < Size; i++) {

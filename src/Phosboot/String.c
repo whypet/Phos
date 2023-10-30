@@ -5,7 +5,7 @@
 
 UINTN
 StrLen(
-	IN const CHAR16 *String
+	IN CONST CHAR16 *String
 ) {
 	UINTN Length = 0;
 
@@ -16,7 +16,7 @@ StrLen(
 
 UINTN
 StrLen8(
-	IN const CHAR8 *String
+	IN CONST CHAR8 *String
 ) {
 	UINTN Length = 0;
 
@@ -119,7 +119,7 @@ WriteSignedDecimal(
 
 VOID
 PrintVariadic(
-	IN const CHAR16 *Format,
+	IN CONST CHAR16 *Format,
 	IN VA_LIST       Args
 ) {
 #define RESIZE(NewSize) { \
@@ -144,14 +144,14 @@ PrintVariadic(
 		} else if (FormatSpecifier) {
 			switch (*Format) {
 			case L'c': {
-				CHAR16 Char = VA_ARG(Args, CHAR16);
+				CHAR16 Char = (CHAR16)VA_ARG(Args, INT32);
 				
 				String[i] = Char;
 
 				break;
 			}
 			case L'C': {
-				CHAR8 Char = VA_ARG(Args, CHAR8);
+				CHAR8 Char = (CHAR16)VA_ARG(Args, INT32);
 				
 				String[i] = (CHAR16)Char; // zero-extend (bmp is the same for both utf-16 and ansi)
 
@@ -232,7 +232,7 @@ PrintVariadic(
 
 VOID
 Print(
-	IN const CHAR16 *Format,
+	IN CONST CHAR16 *Format,
 	...
 ) {
 	VA_LIST Args;

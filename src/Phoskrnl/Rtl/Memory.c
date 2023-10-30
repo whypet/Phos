@@ -5,17 +5,17 @@
 // For now, they act like a regular movsb.
 //
 
-inline
+INLINE
 VOID
 RtlZeroMemory(
 	IN OUT VOID *Dst,
 	IN     UINTN Size
 ) {
 	for (UINTN i = 0; i < Size; i++)
-		*((INT8*)Dst + i) = 0;
+		*((INT8 *)Dst + i) = 0;
 }
 
-inline
+INLINE
 VOID
 RtlSetMemory(
 	IN OUT VOID *Dst,
@@ -23,16 +23,16 @@ RtlSetMemory(
 	IN     UINTN Size
 ) {
 	for (UINTN i = 0; i < Size; i++)
-		*((INT8*)Dst + i) = Val;
+		*((INT8 *)Dst + i) = Val;
 }
 
-inline
+INLINE
 VOID
 RtlCopyMemory(
 	IN OUT VOID       *Dst,
-	IN     const VOID *Src,
+	IN     CONST VOID *Src,
 	IN     UINTN       Size
 ) {
 	for (UINTN i = 0; i < Size; i++)
-		*((INT8*)Dst + i) = *((INT8*)Src + i);
+		*((INT8 *)Dst + i) = *((INT8 *)Src + i);
 }

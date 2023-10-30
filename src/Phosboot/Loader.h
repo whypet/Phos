@@ -119,17 +119,16 @@ typedef struct {
 typedef struct {
     UINT32 VirtualAddress;
     UINT32 SizeOfBlock;
-//  UINT16 TypeOffset[1];
 } IMAGE_BASE_RELOCATION;
 
 typedef struct {
 	BOOLEAN(*ValidatePE64)(
-		IN const VOID *RawImage,
+		IN CONST VOID *RawImage,
 		IN UINTN       Size
 	);
 
 	VOID *(*AllocateImage)(
-		IN  const VOID *RawImage,
+		IN  CONST VOID *RawImage,
 		OUT UINTN      *AllocatedSize
 	);
 
@@ -140,13 +139,13 @@ typedef struct {
 
 	VOID(*MapSections)(
 		IN OUT VOID       *Image,
-		IN     const VOID *RawImage
+		IN     CONST VOID *RawImage
 	);
 
 	BOOLEAN(*RelocateImage)(
 		IN OUT VOID                          *Image,
-		IN     const IMAGE_OPTIONAL_HEADER64 *OptionalHeader
+		IN     CONST IMAGE_OPTIONAL_HEADER64 *OptionalHeader
 	);
 } LOADER;
 
-extern const LOADER *Loader;
+EXTERN CONST LOADER *Loader;

@@ -12,9 +12,9 @@ ZeroMemory(
 
 VOID
 CopyMemory(
-	IN OUT VOID *Dst,
-	IN     VOID *Src,
-	IN     UINTN Size
+	IN OUT VOID       *Dst,
+	IN     CONST VOID *Src,
+	IN     UINTN       Size
 ) {
 	for (UINTN i = 0; i < Size; i++)
 		*((INT8*)Dst + i) = *((INT8*)Src + i);

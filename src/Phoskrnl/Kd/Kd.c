@@ -4,10 +4,10 @@
 #include <Hal/Hal.h>
 #include <Debug/Protocol.h>
 
-BOOL
+BOOLEAN
 PHOSAPI
 KdPrint(
-	IN const CHAR8 *Message
+	IN CONST CHAR8 *Message
 ) {
 	DEBUG_PACKET_MESSAGE Packet = { 0 };
 
@@ -25,7 +25,7 @@ KdPrint(
 		Size);
 
 	if (Result == 0)
-		HalWriteSerialEx(COM1, (const UINT8 *)Data, Size);
+		HalWriteSerialEx(COM1, (CONST UINT8 *)Data, Size);
 
 	return Result == 0;
 }

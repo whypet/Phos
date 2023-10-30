@@ -5,32 +5,32 @@
 
 BOOLEAN
 ValidatePE64(
-	IN const VOID *RawImage,
+	IN CONST VOID *RawImage,
 	IN UINTN       Size
 ) {
 	ASSERT(RawImage != NULL && Size > 0);
 	
-	const IMAGE_DOS_HEADER *DosHeader = (const IMAGE_DOS_HEADER *)RawImage;
+	CONST IMAGE_DOS_HEADER *DosHeader = (CONST IMAGE_DOS_HEADER *)RawImage;
 
 	if (DosHeader->e_magic != DOS_MZ)
 		return FALSE;
 	
-	const IMAGE_NT_HEADERS64 *NtHeaders = (const IMAGE_NT_HEADERS64 *)((UINTN)RawImage + DosHeader->e_lfanew);
+	CONST IMAGE_NT_HEADERS64 *NtHeaders = (CONST IMAGE_NT_HEADERS64 *)((UINTN)RawImage + DosHeader->e_lfanew);
 
 	return NtHeaders->FileHeader.Machine == IMAGE_FILE_MACHINE_AMD64;
 }
 
 VOID *
 AllocateImage(
-	IN  const VOID *RawImage,
+	IN  CONST VOID *RawImage,
 	OUT UINTN      *AllocatedSize
 ) {
 	EFI_STATUS Status = EFI_SUCCESS;
 
 	ASSERT(RawImage != NULL && AllocatedSize != NULL);
 
-	const IMAGE_DOS_HEADER   *DosHeader = (const IMAGE_DOS_HEADER *)RawImage;
-	const IMAGE_NT_HEADERS64 *NtHeaders = (const IMAGE_NT_HEADERS64 *)((UINTN)RawImage + DosHeader->e_lfanew);
+	CONST IMAGE_DOS_HEADER   *DosHeader = (CONST IMAGE_DOS_HEADER *)RawImage;
+	CONST IMAGE_NT_HEADERS64 *NtHeaders = (CONST IMAGE_NT_HEADERS64 *)((UINTN)RawImage + DosHeader->e_lfanew);
 
 	INTN PageCount = BLOCKS(NtHeaders->OptionalHeader.SizeOfImage, 4096);
 
@@ -75,12 +75,12 @@ FreeImage(
 VOID
 MapSections(
 	IN OUT VOID       *Image,
-	IN     const VOID *RawImage
+	IN     CONST VOID *RawImage
 ) {
 	ASSERT(Image != NULL && RawImage != NULL);
 
-	const IMAGE_DOS_HEADER   *DosHeader = (const IMAGE_DOS_HEADER *)RawImage;
-	const IMAGE_NT_HEADERS64 *NtHeaders = (const IMAGE_NT_HEADERS64 *)((UINTN)RawImage + DosHeader->e_lfanew);
+	CONST IMAGE_DOS_HEADER   *DosHeader = (CONST IMAGE_DOS_HEADER *)RawImage;
+	CONST IMAGE_NT_HEADERS64 *NtHeaders = (CONST IMAGE_NT_HEADERS64 *)((UINTN)RawImage + DosHeader->e_lfanew);
 
 	IMAGE_SECTION_HEADER *Section = IMAGE_FIRST_SECTION(NtHeaders);
 	UINT16 Sections = NtHeaders->FileHeader.NumberOfSections;
@@ -96,19 +96,19 @@ MapSections(
 BOOLEAN
 RelocateImage(
 	IN OUT VOID                          *Image,
-	IN     const IMAGE_OPTIONAL_HEADER64 *OptionalHeader
+	IN     CONST IMAGE_OPTIONAL_HEADER64 *OptionalHeader
 ) {
 	UINT64 BaseDelta = (UINT64)Image - OptionalHeader->ImageBase;
 
 	if (BaseDelta == 0)
 		return FALSE;
 
-	const IMAGE_DATA_DIRECTORY *RelocationDirectory = &OptionalHeader->DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC];
+	CONST IMAGE_DATA_DIRECTORY *RelocationDirectory = &OptionalHeader->DataDirectory[IMAGE_DIRECTORY_ENTRY_BASERELOC];
 
 	if (RelocationDirectory->Size == 0)
 		return FALSE;
 
-	__unaligned IMAGE_BASE_RELOCATION *RelocationData = (__unaligned IMAGE_BASE_RELOCATION *)((UINTN)Image + RelocationDirectory->VirtualAddress);
+	UNALIGNED IMAGE_BASE_RELOCATION *RelocationData = (UNALIGNED IMAGE_BASE_RELOCATION *)((UINTN)Image + RelocationDirectory->VirtualAddress);
 	
 	// Loop through every block
 	for (; RelocationData->VirtualAddress > 0;) {
@@ -125,13 +125,13 @@ RelocateImage(
 			}
 		}
 
-		RelocationData = (__unaligned IMAGE_BASE_RELOCATION *)((UINTN)RelocationData + RelocationData->SizeOfBlock);
+		RelocationData = (UNALIGNED IMAGE_BASE_RELOCATION *)((UINTN)RelocationData + RelocationData->SizeOfBlock);
 	}
 
 	return TRUE;
 }
 
-const LOADER _Loader = {
+CONST LOADER _Loader = {
 	.ValidatePE64  = ValidatePE64,
 	.AllocateImage = AllocateImage,
 	.FreeImage     = FreeImage,
@@ -139,4 +139,4 @@ const LOADER _Loader = {
 	.RelocateImage = RelocateImage
 };
 
-const LOADER *Loader = &_Loader;
+CONST LOADER *Loader = &_Loader;

@@ -3,9 +3,9 @@
 #include <Util.hh>
 
 extern "C" VOID Log(
-	INT32       Type,
-	const CHAR *PrettyFunc,
-	const CHAR *Format,
+	INT32        Type,
+	const CHAR8 *PrettyFunc,
+	const CHAR8 *Format,
 	...
 ) {
 	va_list Args;

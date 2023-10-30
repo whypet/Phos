@@ -1,6 +1,10 @@
 #pragma once
 
 #include <Uefi.h>
+
+#include <Phosdef.h>
+#include <Phoskinit.h>
+
 #include <Protocol/GraphicsOutput.h>
 #include <Protocol/LoadedImage.h>
 #include <Protocol/SimpleFileSystem.h>
@@ -11,17 +15,6 @@
 
 #define KERNEL_PATH L"System\\Phoskrnl"
 
-typedef struct {
-	VOID  *Framebuffer;
-	UINTN  Size;
-	UINT32 Width;
-	UINT32 Height;
-} VIDEO_INFO;
-
-typedef VOID(__attribute__((__ms_abi__)) * FnKiMain)(
-	IN VIDEO_INFO
-);
-
-extern EFI_SYSTEM_TABLE     *ST;
-extern EFI_BOOT_SERVICES    *BS;
-extern EFI_RUNTIME_SERVICES *RS;
+EXTERN EFI_SYSTEM_TABLE     *ST;
+EXTERN EFI_BOOT_SERVICES    *BS;
+EXTERN EFI_RUNTIME_SERVICES *RS;
