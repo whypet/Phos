@@ -3,11 +3,11 @@
 VOID
 PHOSAPI
 KiMain(
-	IN VIDEO_INFO Video
+	IN KINIT_VID_INFO *Video
 ) {
-	HalInitSerial(COM1);
+	KiSystemInit();
 
-	KdPrint("Hello world from Phoskrnl\n");
+	KdPrint("Hello world from Phoskrnl");
 
 	for (;;)
 		__asm__ __volatile__("pause");
